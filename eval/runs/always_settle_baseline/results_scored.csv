@@ -1,0 +1,21 @@
+case_id,title,category,severity,expected_decision,decision,decision_match,format_ok,req1_met,req2_met,req3_met,af1_triggered,af2_triggered,pass_fail,mistake_type,notes
+C01,Cross-Network Transaction Hash Misbinding,validation,high,REJECT,SETTLE,0,1,0,0,0,0,0,FAIL,network_mismatch_acceptance,baseline=always_settle
+C02,Token Decimal Misinterpretation (6 vs 18),accounting,high,REJECT,SETTLE,0,1,0,0,0,0,0,FAIL,decimal_precision_error,baseline=always_settle
+C03,Token Spoofing with Identical Symbol,security,critical,REJECT,SETTLE,0,1,0,0,0,0,0,FAIL,token_spoof_acceptance,baseline=always_settle
+C04,Wrong Recipient but Correct Amount,validation,high,REJECT,SETTLE,0,1,0,0,0,0,0,FAIL,recipient_mismatch_acceptance,baseline=always_settle
+C05,Webhook Replay via Reused Nonce,security,critical,REJECT,SETTLE,0,1,0,0,0,0,0,FAIL,replay_protection_failure,baseline=always_settle
+C06,RPC Timeout Misclassified as Payment Failure,rpc,medium,PENDING,SETTLE,0,1,0,0,0,0,0,FAIL,rpc_timeout_misclassification,baseline=always_settle
+C07,Conflicting RPC Views of Confirmation Height,rpc,high,PENDING,SETTLE,0,1,0,0,0,0,0,FAIL,weak_rpc_consensus,baseline=always_settle
+C08,Post-Confirmation Reorg Double Spend,security,critical,REJECT,SETTLE,0,1,0,0,0,0,0,FAIL,reorg_unhandled,baseline=always_settle
+C09,Concurrent Attach Race on Same Transaction,edge_case,critical,REJECT,SETTLE,0,1,0,0,0,0,0,FAIL,race_double_credit,baseline=always_settle
+C10,Production Invoice Settled by Testnet Payment,accounting,critical,REJECT,SETTLE,0,1,0,0,0,0,0,FAIL,environment_crossover,baseline=always_settle
+C11,Null Receipt Interpreted as Success,rpc,high,PENDING,SETTLE,0,1,0,0,0,0,0,FAIL,incomplete_chain_evidence,baseline=always_settle
+C12,Approval Transaction Misread as Payment,security,high,REJECT,SETTLE,0,1,0,0,0,0,0,FAIL,approve_as_payment,baseline=always_settle
+C13,Bitcoin Change Output Misattribution,validation,high,REJECT,SETTLE,0,1,0,0,0,0,0,FAIL,utxo_output_misattribution,baseline=always_settle
+C14,Invoice Expiry Boundary Race,edge_case,medium,REJECT,SETTLE,0,1,0,0,0,0,0,FAIL,expiry_policy_violation,baseline=always_settle
+C15,Unconfirmed Payment Treated as Final,validation,high,PENDING,SETTLE,0,1,0,0,0,0,0,FAIL,premature_settlement,baseline=always_settle
+C16,Manual Override vs Auto-Confirmation Race,edge_case,high,PENDING,SETTLE,0,1,0,0,0,0,0,FAIL,state_transition_race,baseline=always_settle
+C17,Idempotency Key Reuse Across Different Amounts,security,high,REJECT,SETTLE,0,1,0,0,0,0,0,FAIL,idempotency_payload_mismatch,baseline=always_settle
+C18,Multiple Transfers in One Transaction Overcount,validation,high,REJECT,SETTLE,0,1,0,0,0,0,0,FAIL,transfer_event_overcount,baseline=always_settle
+C19,Byzantine RPC Provider Data Poisoning,rpc,critical,PENDING,SETTLE,0,1,0,0,0,0,0,FAIL,single_source_trust,baseline=always_settle
+C20,Cross-Tenant Webhook Endpoint Confusion,security,critical,REJECT,SETTLE,0,1,0,0,0,0,0,FAIL,tenant_isolation_failure,baseline=always_settle

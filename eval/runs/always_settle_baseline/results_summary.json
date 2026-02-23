@@ -1,0 +1,164 @@
+{
+  "model": "Weak-Open-Baseline",
+  "cases_evaluated": 20,
+  "benchmark_total_cases": 20,
+  "benchmark_coverage_pct": 100,
+  "pass": 0,
+  "fail": 20,
+  "pass_rate_pct": 0,
+  "critical_cases_evaluated": 7,
+  "critical_fail_count": 7,
+  "critical_fail_rate_pct": 100,
+  "risk_weights": {
+    "low": 1,
+    "medium": 3,
+    "high": 7,
+    "critical": 10
+  },
+  "risk_weighted_fail_numerator": 153,
+  "risk_weighted_total_denominator": 153,
+  "risk_weighted_fail_rate_pct": 100,
+  "risk_weighted_accuracy_pct": 0,
+  "by_category": [
+    {
+      "key": "accounting",
+      "total": 2,
+      "pass": 0,
+      "fail": 2,
+      "pass_rate_pct": 0
+    },
+    {
+      "key": "edge_case",
+      "total": 3,
+      "pass": 0,
+      "fail": 3,
+      "pass_rate_pct": 0
+    },
+    {
+      "key": "rpc",
+      "total": 4,
+      "pass": 0,
+      "fail": 4,
+      "pass_rate_pct": 0
+    },
+    {
+      "key": "security",
+      "total": 6,
+      "pass": 0,
+      "fail": 6,
+      "pass_rate_pct": 0
+    },
+    {
+      "key": "validation",
+      "total": 5,
+      "pass": 0,
+      "fail": 5,
+      "pass_rate_pct": 0
+    }
+  ],
+  "by_severity": [
+    {
+      "key": "critical",
+      "total": 7,
+      "pass": 0,
+      "fail": 7,
+      "pass_rate_pct": 0
+    },
+    {
+      "key": "high",
+      "total": 11,
+      "pass": 0,
+      "fail": 11,
+      "pass_rate_pct": 0
+    },
+    {
+      "key": "medium",
+      "total": 2,
+      "pass": 0,
+      "fail": 2,
+      "pass_rate_pct": 0
+    }
+  ],
+  "fail_mistakes": [
+    {
+      "mistake_type": "network_mismatch_acceptance",
+      "count": 1
+    },
+    {
+      "mistake_type": "decimal_precision_error",
+      "count": 1
+    },
+    {
+      "mistake_type": "token_spoof_acceptance",
+      "count": 1
+    },
+    {
+      "mistake_type": "recipient_mismatch_acceptance",
+      "count": 1
+    },
+    {
+      "mistake_type": "replay_protection_failure",
+      "count": 1
+    },
+    {
+      "mistake_type": "rpc_timeout_misclassification",
+      "count": 1
+    },
+    {
+      "mistake_type": "weak_rpc_consensus",
+      "count": 1
+    },
+    {
+      "mistake_type": "reorg_unhandled",
+      "count": 1
+    },
+    {
+      "mistake_type": "race_double_credit",
+      "count": 1
+    },
+    {
+      "mistake_type": "environment_crossover",
+      "count": 1
+    },
+    {
+      "mistake_type": "incomplete_chain_evidence",
+      "count": 1
+    },
+    {
+      "mistake_type": "approve_as_payment",
+      "count": 1
+    },
+    {
+      "mistake_type": "utxo_output_misattribution",
+      "count": 1
+    },
+    {
+      "mistake_type": "expiry_policy_violation",
+      "count": 1
+    },
+    {
+      "mistake_type": "premature_settlement",
+      "count": 1
+    },
+    {
+      "mistake_type": "state_transition_race",
+      "count": 1
+    },
+    {
+      "mistake_type": "idempotency_payload_mismatch",
+      "count": 1
+    },
+    {
+      "mistake_type": "transfer_event_overcount",
+      "count": 1
+    },
+    {
+      "mistake_type": "single_source_trust",
+      "count": 1
+    },
+    {
+      "mistake_type": "tenant_isolation_failure",
+      "count": 1
+    }
+  ]
+}

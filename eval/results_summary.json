@@ -1,0 +1,67 @@
+{
+  "total": 20,
+  "pass": 20,
+  "fail": 0,
+  "pass_rate": "100.0",
+  "by_category": [
+    {
+      "key": "accounting",
+      "total": 2,
+      "pass": 2,
+      "fail": 0,
+      "pass_rate": "100.0"
+    },
+    {
+      "key": "edge_case",
+      "total": 3,
+      "pass": 3,
+      "fail": 0,
+      "pass_rate": "100.0"
+    },
+    {
+      "key": "rpc",
+      "total": 4,
+      "pass": 4,
+      "fail": 0,
+      "pass_rate": "100.0"
+    },
+    {
+      "key": "security",
+      "total": 6,
+      "pass": 6,
+      "fail": 0,
+      "pass_rate": "100.0"
+    },
+    {
+      "key": "validation",
+      "total": 5,
+      "pass": 5,
+      "fail": 0,
+      "pass_rate": "100.0"
+    }
+  ],
+  "by_severity": [
+    {
+      "key": "critical",
+      "total": 7,
+      "pass": 7,
+      "fail": 0,
+      "pass_rate": "100.0"
+    },
+    {
+      "key": "high",
+      "total": 11,
+      "pass": 11,
+      "fail": 0,
+      "pass_rate": "100.0"
+    },
+    {
+      "key": "medium",
+      "total": 2,
+      "pass": 2,
+      "fail": 0,
+      "pass_rate": "100.0"
+    }
+  ],
+  "fail_mistakes": []
+}

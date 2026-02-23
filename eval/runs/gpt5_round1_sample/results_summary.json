@@ -1,0 +1,97 @@
+{
+  "model": "GPT-5-Round1-Sample",
+  "cases_evaluated": 10,
+  "benchmark_total_cases": 20,
+  "benchmark_coverage_pct": 50,
+  "pass": 5,
+  "fail": 5,
+  "pass_rate_pct": 50,
+  "critical_cases_evaluated": 5,
+  "critical_fail_count": 2,
+  "critical_fail_rate_pct": 40,
+  "risk_weights": {
+    "low": 1,
+    "medium": 3,
+    "high": 7,
+    "critical": 10
+  },
+  "risk_weighted_fail_numerator": 37,
+  "risk_weighted_total_denominator": 81,
+  "risk_weighted_fail_rate_pct": 45.7,
+  "risk_weighted_accuracy_pct": 54.3,
+  "by_category": [
+    {
+      "key": "edge_case",
+      "total": 1,
+      "pass": 0,
+      "fail": 1,
+      "pass_rate_pct": 0
+    },
+    {
+      "key": "rpc",
+      "total": 3,
+      "pass": 0,
+      "fail": 3,
+      "pass_rate_pct": 0
+    },
+    {
+      "key": "security",
+      "total": 4,
+      "pass": 3,
+      "fail": 1,
+      "pass_rate_pct": 75
+    },
+    {
+      "key": "validation",
+      "total": 2,
+      "pass": 2,
+      "fail": 0,
+      "pass_rate_pct": 100
+    }
+  ],
+  "by_severity": [
+    {
+      "key": "critical",
+      "total": 5,
+      "pass": 3,
+      "fail": 2,
+      "pass_rate_pct": 60
+    },
+    {
+      "key": "high",
+      "total": 4,
+      "pass": 2,
+      "fail": 2,
+      "pass_rate_pct": 50
+    },
+    {
+      "key": "medium",
+      "total": 1,
+      "pass": 0,
+      "fail": 1,
+      "pass_rate_pct": 0
+    }
+  ],
+  "fail_mistakes": [
+    {
+      "mistake_type": "rpc_timeout_misclassification",
+      "count": 1
+    },
+    {
+      "mistake_type": "race_double_credit",
+      "count": 1
+    },
+    {
+      "mistake_type": "incomplete_chain_evidence",
+      "count": 1
+    },
+    {
+      "mistake_type": "idempotency_payload_mismatch",
+      "count": 1
+    },
+    {
+      "mistake_type": "single_source_trust",
+      "count": 1
+    }
+  ]
+}

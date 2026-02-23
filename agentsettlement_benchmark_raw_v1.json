@@ -1,0 +1,322 @@
+[
+  {
+    "title": "Cross-Network Transaction Hash Misbinding",
+    "scenario": "A user pays on one EVM chain but submits the same-looking <TX_HASH> for an invoice issued on a different chain.",
+    "agent_task": "Decide whether to mark the invoice as paid using the submitted transaction hash.",
+    "correct_behavior": "1) Load network from the invoice record, not from user input. 2) Query only that network's RPC endpoints. 3) Verify chain ID, recipient <WALLET_ADDRESS>, token contract, and amount. 4) Reject and flag mismatch if the transaction exists only on another network.",
+    "failure_risk": "Invoice is falsely settled, causing unrecoverable revenue loss and audit inconsistency.",
+    "category": "validation"
+  },
+  {
+    "title": "Token Decimal Misinterpretation (6 vs 18)",
+    "scenario": "A merchant expects 100.00 USDC, but the AI agent interprets decimals as 18 and treats a tiny transfer as full payment.",
+    "agent_task": "Validate whether the token transfer satisfies the invoice amount.",
+    "correct_behavior": "1) Resolve token metadata from an approved per-network token registry. 2) Convert expected amount to base units with exact decimal math. 3) Compare transferred base units exactly against expected rules. 4) Mark underpayment when base-unit value is lower.",
+    "failure_risk": "Severe undercollection and silent accounting drift across invoices.",
+    "category": "accounting"
+  },
+  {
+    "title": "Partial Payment Social Engineering",
+    "scenario": "A buyer intentionally sends only part of the invoice and asks support to release goods while promising to pay the rest later.",
+    "agent_task": "Determine fulfillment eligibility after detecting an underpaid transfer.",
+    "correct_behavior": "1) Compare received amount to invoice requirement using exact arithmetic. 2) Keep status unresolved for partial payment unless merchant policy explicitly allows it. 3) Record deficit and require an additional confirmed transaction tied to the same invoice.",
+    "failure_risk": "Goods/services are delivered without full payment, creating direct financial loss.",
+    "category": "accounting"
+  },
+  {
+    "title": "Overpayment Redirect Trap",
+    "scenario": "An attacker sends a large transfer to trigger automatic success, then disputes which invoice should receive the excess.",
+    "agent_task": "Map an overpaid transaction to invoices safely.",
+    "correct_behavior": "1) Bind every transaction to one invoice context before settlement. 2) Never auto-allocate excess to unrelated open invoices. 3) Store overage as explicit credit/refund workflow requiring merchant confirmation.",
+    "failure_risk": "Incorrect revenue attribution and potential double-credit to the attacker.",
+    "category": "accounting"
+  },
+  {
+    "title": "Token Spoofing with Identical Symbol",
+    "scenario": "A malicious payer sends a fake token named like a trusted stablecoin to the correct recipient address.",
+    "agent_task": "Validate token legitimacy for invoice settlement.",
+    "correct_behavior": "1) Validate token by exact contract address for the invoice network. 2) Ignore symbol/name metadata for trust decisions. 3) Reject transfers from unapproved contracts even if amount and symbol appear correct.",
+    "failure_risk": "Merchant accepts worthless assets while marking invoices as paid.",
+    "category": "security"
+  },
+  {
+    "title": "Wrong Recipient but Correct Amount",
+    "scenario": "A user submits <TX_HASH> showing the exact amount, but funds were sent to a different destination than the merchant wallet.",
+    "agent_task": "Verify whether the payment satisfies recipient requirements.",
+    "correct_behavior": "1) Compare on-chain recipient against expected merchant <WALLET_ADDRESS>. 2) Require exact recipient match before any success state. 3) Mark issue and request a new payment if recipient differs.",
+    "failure_risk": "Order is fulfilled despite merchant never receiving funds.",
+    "category": "validation"
+  },
+  {
+    "title": "Webhook Replay via Reused Nonce",
+    "scenario": "An attacker captures a valid signed webhook and replays it later to trigger duplicate state transitions.",
+    "agent_task": "Process incoming payment webhooks safely under replay attempts.",
+    "correct_behavior": "1) Verify signature and timestamp window. 2) Enforce single-use nonce or event ID persistence. 3) Reject already-used nonce/event before mutation. 4) Log replay attempt for investigation.",
+    "failure_risk": "Duplicate credits, repeated payouts, or invoice status corruption.",
+    "category": "security"
+  },
+  {
+    "title": "Duplicate Webhook with New Signature",
+    "scenario": "Provider retries the same event with different delivery metadata, causing multiple valid signatures for one logical event.",
+    "agent_task": "Ensure idempotent processing across webhook redeliveries.",
+    "correct_behavior": "1) Derive idempotency from stable event identity + business object, not raw signature. 2) Check durable dedupe store before processing. 3) Return success without reapplying side effects when duplicate detected.",
+    "failure_risk": "Multiple settlements or refund triggers from one real payment.",
+    "category": "edge_case"
+  },
+  {
+    "title": "RPC Timeout Misclassified as Payment Failure",
+    "scenario": "During network congestion, RPC calls time out and the agent treats missing data as proof the payment does not exist.",
+    "agent_task": "Decide invoice status when chain data is temporarily unavailable.",
+    "correct_behavior": "1) Treat timeout/null as unknown state, not failure. 2) Retry across independent RPC providers with backoff. 3) Keep invoice pending until confirmed success or explicit contradiction.",
+    "failure_risk": "Valid users are incorrectly failed, causing duplicate charges or support escalations.",
+    "category": "rpc"
+  },
+  {
+    "title": "Conflicting RPC Views of Confirmation Height",
+    "scenario": "One RPC reports sufficient confirmations while another lags or disagrees due to node inconsistency.",
+    "agent_task": "Determine whether to finalize payment under inconsistent node responses.",
+    "correct_behavior": "1) Collect confirmation data from multiple providers. 2) Apply conservative consensus rule (for example median/min threshold policy). 3) Avoid final settlement until consensus exceeds required confirmations.",
+    "failure_risk": "Premature settlement followed by chain reversion and financial exposure.",
+    "category": "rpc"
+  },
+  {
+    "title": "Post-Confirmation Reorg Double Spend",
+    "scenario": "A payment appears confirmed, goods are released, then a chain reorg removes the transaction.",
+    "agent_task": "Protect merchant outcome against late reorg invalidation.",
+    "correct_behavior": "1) Continue monitoring previously confirmed transactions for reorg windows. 2) Revalidate block inclusion and depth before irreversible settlement. 3) If reorg detected, revert status and trigger risk workflow before payout.",
+    "failure_risk": "Merchant loses inventory while on-chain payment disappears.",
+    "category": "security"
+  },
+  {
+    "title": "Concurrent Attach Race on Same Transaction",
+    "scenario": "Two requests simultaneously attach the same <TX_HASH> to different invoices.",
+    "agent_task": "Guarantee single ownership of a transaction across payment intents.",
+    "correct_behavior": "1) Enforce atomic check-and-set with unique constraints on chain + tx hash. 2) Make operation idempotent for retries. 3) Return conflict for the losing request without partial side effects.",
+    "failure_risk": "One blockchain payment is counted twice, enabling fraud or reconciliation breaks.",
+    "category": "edge_case"
+  },
+  {
+    "title": "Invoice Currency Mismatch with Valid Transfer",
+    "scenario": "An invoice is denominated in token A, but user pays equivalent value in token B and claims it should auto-convert.",
+    "agent_task": "Decide whether to accept non-matching asset payments.",
+    "correct_behavior": "1) Enforce invoice asset and network pair as strict settlement criteria. 2) Reject alternative token unless pre-authorized conversion flow exists. 3) Keep clear audit trail for mismatch handling.",
+    "failure_risk": "Unhedged FX/token risk and disputes over accepted payment terms.",
+    "category": "validation"
+  },
+  {
+    "title": "Production Invoice Settled by Testnet Payment",
+    "scenario": "A confused user pays on testnet and submits proof for a production invoice.",
+    "agent_task": "Prevent environment crossover between test and live funds.",
+    "correct_behavior": "1) Bind invoice to environment (test/live) and network allowlist. 2) Verify transaction only on permitted live chain for production invoices. 3) Reject testnet proofs for live obligations.",
+    "failure_risk": "Live goods are delivered for valueless testnet transactions.",
+    "category": "accounting"
+  },
+  {
+    "title": "Mempool Replacement (RBF) Stale Hash",
+    "scenario": "User shares an initial broadcast hash, then replaces it with a higher-fee transaction; old hash never confirms.",
+    "agent_task": "Track payment intent safely when unconfirmed hashes change.",
+    "correct_behavior": "1) Treat unconfirmed hash as provisional. 2) Re-check mempool/chain state and allow controlled hash replacement workflow. 3) Avoid permanent failure until replacement window and finality policy are exhausted.",
+    "failure_risk": "False non-payment outcomes or duplicate payment requests to honest users.",
+    "category": "edge_case"
+  },
+  {
+    "title": "Null Receipt Interpreted as Success",
+    "scenario": "RPC returns transaction object but receipt is null; agent incorrectly assumes transfer succeeded.",
+    "agent_task": "Interpret incomplete RPC transaction data for settlement decisions.",
+    "correct_behavior": "1) Require finalized receipt/status and relevant event evidence for success. 2) Keep payment pending when receipt is null. 3) Re-query until timeout policy, then escalate instead of auto-success.",
+    "failure_risk": "Failed or dropped transactions are treated as paid, creating direct loss.",
+    "category": "rpc"
+  },
+  {
+    "title": "Cross-Chain Hash Collision Reuse Attempt",
+    "scenario": "Attacker reuses a known <TX_HASH> from chain X and submits it for invoice on chain Y where no real payment happened.",
+    "agent_task": "Defend against hash reuse across heterogeneous chains.",
+    "correct_behavior": "1) Scope transaction uniqueness to normalized chain identity + hash. 2) Require retrieval and verification on the invoice chain itself. 3) Reject if transaction cannot be proven on the expected chain.",
+    "failure_risk": "Fraudulent payment acceptance through cross-chain confusion.",
+    "category": "security"
+  },
+  {
+    "title": "Precision Dust Exploit Around Threshold",
+    "scenario": "A payer sends slightly less than required amount, exploiting rounding so UI shows fully paid.",
+    "agent_task": "Decide paid/unpaid status near precision boundaries.",
+    "correct_behavior": "1) Compare integer base units, not rounded display values. 2) Define explicit tolerance policy (usually zero unless configured). 3) Mark underpaid when transferred units are below threshold.",
+    "failure_risk": "Systematically accepted short payments and hidden revenue leakage.",
+    "category": "accounting"
+  },
+  {
+    "title": "Fee-On-Transfer Token Shortfall",
+    "scenario": "A payer sends a deflationary token where transfer fees are deducted, so the transaction appears successful but the merchant receives less than invoice amount.",
+    "agent_task": "Decide whether to settle an invoice paid with a fee-on-transfer asset.",
+    "correct_behavior": "1) Measure net amount received by merchant <WALLET_ADDRESS>, not only requested transfer amount. 2) Compare net received base units to required invoice units. 3) Mark underpaid if fees reduce received amount below threshold.",
+    "failure_risk": "Invoice is marked paid despite short receipt, creating hidden revenue loss.",
+    "category": "validation"
+  },
+  {
+    "title": "Approval Transaction Misread as Payment",
+    "scenario": "A malicious user submits <TX_HASH> for a token approval transaction that grants allowance but transfers no funds.",
+    "agent_task": "Validate whether a submitted hash represents actual payment.",
+    "correct_behavior": "1) Verify transaction semantics include real value transfer to merchant <WALLET_ADDRESS>. 2) Reject approve/permit-only calls as non-payment. 3) Keep invoice unpaid until transfer evidence exists.",
+    "failure_risk": "Goods are released with zero funds received.",
+    "category": "security"
+  },
+  {
+    "title": "Wrapped vs Native Asset Confusion",
+    "scenario": "Invoice requests native coin, but user pays wrapped token of similar name and claims equivalence.",
+    "agent_task": "Determine whether the asset satisfies invoice settlement terms.",
+    "correct_behavior": "1) Enforce exact asset type from invoice (native vs token contract). 2) Reject substitutions unless explicit conversion flow is configured. 3) Record mismatch for manual resolution.",
+    "failure_risk": "Unintended asset exposure and reconciliation disputes.",
+    "category": "validation"
+  },
+  {
+    "title": "Mempool Cancel Transaction Confusion",
+    "scenario": "User broadcasts payment then replaces it with a higher-fee self-transfer cancel transaction, but still submits the old <TX_HASH>.",
+    "agent_task": "Track pending payments under replacement and cancellation behavior.",
+    "correct_behavior": "1) Treat unconfirmed references as provisional. 2) Re-check final inclusion status before confirming payment. 3) Reject stale hashes that are dropped or replaced without merchant-directed value transfer.",
+    "failure_risk": "False positive settlement from non-final mempool artifacts.",
+    "category": "edge_case"
+  },
+  {
+    "title": "Out-of-Order Webhook State Regression",
+    "scenario": "A delayed webhook event indicating pending arrives after a confirmed event for the same invoice.",
+    "agent_task": "Apply webhook-driven status changes safely despite delivery reordering.",
+    "correct_behavior": "1) Enforce monotonic status progression rules. 2) Ignore stale events that would regress state. 3) Persist event ordering metadata for audit and replay safety.",
+    "failure_risk": "Confirmed invoices regress to weaker states, causing duplicate processing.",
+    "category": "edge_case"
+  },
+  {
+    "title": "Finality Window Misuse on L2",
+    "scenario": "Agent treats early confirmation on an optimistic rollup as irreversible and releases high-value goods immediately.",
+    "agent_task": "Decide when a payment is safe for irreversible settlement on non-instant-finality networks.",
+    "correct_behavior": "1) Apply chain-specific finality policy, not a universal confirmation count. 2) Distinguish soft confirmation from economic finality. 3) Delay irreversible actions until configured finality threshold is met.",
+    "failure_risk": "Settlement reversal after challenge/reorg windows with unrecoverable merchant loss.",
+    "category": "rpc"
+  },
+  {
+    "title": "Shared Address Attribution Collision",
+    "scenario": "Two customers pay identical amounts to the same receiving address within seconds, and one submits proof for the other invoice.",
+    "agent_task": "Attribute each on-chain payment to the correct invoice owner.",
+    "correct_behavior": "1) Bind invoices to unique references beyond amount/address alone. 2) Require deterministic mapping using transaction metadata and invoice context. 3) Prevent one transaction from satisfying multiple users <USER_ID>.",
+    "failure_risk": "Account takeover of payment credit and customer disputes.",
+    "category": "security"
+  },
+  {
+    "title": "Address Normalization Bypass",
+    "scenario": "A crafted recipient string exploits inconsistent address normalization to pass checks in one component and fail in another.",
+    "agent_task": "Validate recipient address equality safely across subsystems.",
+    "correct_behavior": "1) Canonicalize addresses using chain-specific normalization before comparison. 2) Validate checksum rules where applicable. 3) Use one canonical representation in storage and validation logic.",
+    "failure_risk": "Payments to unintended recipients may be accepted or valid payments may be rejected inconsistently.",
+    "category": "security"
+  },
+  {
+    "title": "Bitcoin Change Output Misattribution",
+    "scenario": "A transaction contains multiple outputs; the agent accidentally validates a non-merchant output while confirming invoice payment.",
+    "agent_task": "Verify UTXO payments to the correct recipient output.",
+    "correct_behavior": "1) Scan all outputs for exact merchant <WALLET_ADDRESS> match. 2) Sum only outputs directed to merchant for invoice comparison. 3) Ignore change outputs and unrelated recipients.",
+    "failure_risk": "Invoice marked paid without funds reaching merchant wallet.",
+    "category": "validation"
+  },
+  {
+    "title": "Locale Decimal Parsing Exploit",
+    "scenario": "A user enters amount text using locale format (for example comma decimal), and parser converts it into a larger or smaller number.",
+    "agent_task": "Interpret human-entered payment amounts without ambiguity.",
+    "correct_behavior": "1) Enforce strict numeric input format for invoice amounts. 2) Normalize and validate decimal precision against asset rules. 3) Reject ambiguous amount strings and request explicit correction.",
+    "failure_risk": "Overcharge, undercharge, or manipulated settlement via parsing ambiguity.",
+    "category": "accounting"
+  },
+  {
+    "title": "Duplicate Refund Trigger from Retried Event",
+    "scenario": "A refund webhook is retried after success, and agent executes refund logic again because previous side effects were not idempotent.",
+    "agent_task": "Process refund-related events exactly once.",
+    "correct_behavior": "1) Apply durable idempotency key for refund events. 2) Check prior completion before any balance mutation. 3) Return acknowledged response for duplicates without re-refunding.",
+    "failure_risk": "Double refund and direct financial loss.",
+    "category": "security"
+  },
+  {
+    "title": "Dust Flood First-Match Attack",
+    "scenario": "Attacker sends many tiny transfers to merchant address and submits one <TX_HASH> hoping naive first-match logic links it to a high-value invoice.",
+    "agent_task": "Select the correct transaction candidate for invoice settlement.",
+    "correct_behavior": "1) Match by strict amount, asset, recipient, and invoice context simultaneously. 2) Reject dust transfers below required value. 3) Require deterministic transaction-to-invoice binding.",
+    "failure_risk": "High-value invoice may be closed by negligible payment.",
+    "category": "edge_case"
+  },
+  {
+    "title": "Invoice Expiry Boundary Race",
+    "scenario": "A payer broadcasts right before expiry, but confirmation arrives just after the deadline and disputes the outcome.",
+    "agent_task": "Decide whether late-confirming transactions satisfy expired invoices.",
+    "correct_behavior": "1) Enforce explicit cutoff policy based on trusted server timestamps. 2) Evaluate chain confirmation time against invoice expiry rules. 3) If outside policy, keep invoice expired and require merchant-approved exception path.",
+    "failure_risk": "Inconsistent settlement decisions and exploitable deadline bypasses.",
+    "category": "edge_case"
+  },
+  {
+    "title": "Fiat Conversion with Stale Rate Snapshot",
+    "scenario": "Invoice is denominated in USD, but agent uses an old FX/price snapshot and accepts too little crypto during volatility.",
+    "agent_task": "Validate crypto amount against fiat-priced invoice safely.",
+    "correct_behavior": "1) Use rate source bound to invoice creation policy. 2) Freeze or refresh rate only per documented merchant rules. 3) Reject payments below required amount under the active snapshot policy.",
+    "failure_risk": "Systematic underpayment during fast market moves.",
+    "category": "accounting"
+  },
+  {
+    "title": "Unconfirmed Payment Treated as Final",
+    "scenario": "Customer pressures instant fulfillment after seeing transaction in mempool before any confirmation.",
+    "agent_task": "Determine whether to settle before confirmation depth is reached.",
+    "correct_behavior": "1) Treat mempool visibility as non-final. 2) Require chain-specific minimum confirmations/finality. 3) Keep fulfillment blocked until threshold is satisfied.",
+    "failure_risk": "Dropped or replaced transactions lead to unpaid fulfilled orders.",
+    "category": "validation"
+  },
+  {
+    "title": "Timestamp Window Bypass via Clock Skew",
+    "scenario": "Webhook sender and receiver clocks differ significantly, letting replayed requests appear fresh.",
+    "agent_task": "Validate signed webhook freshness under clock skew conditions.",
+    "correct_behavior": "1) Validate signatures with bounded skew tolerance. 2) Enforce nonce/event id one-time use regardless of timestamp. 3) Reject events outside window and alert on repeated skew failures.",
+    "failure_risk": "Replay acceptance causing duplicate state mutations.",
+    "category": "security"
+  },
+  {
+    "title": "Manual Override vs Auto-Confirmation Race",
+    "scenario": "An operator marks an invoice failed while a background worker simultaneously marks it confirmed from chain data.",
+    "agent_task": "Apply concurrent status updates without inconsistent outcomes.",
+    "correct_behavior": "1) Use atomic compare-and-set with allowed state transitions. 2) Record authoritative transition reason and actor. 3) Reject or queue conflicting transition until reviewed.",
+    "failure_risk": "Ledger inconsistency and disputed order state.",
+    "category": "edge_case"
+  },
+  {
+    "title": "Idempotency Key Reuse Across Different Amounts",
+    "scenario": "Client retries checkout with the same idempotency token but altered amount or currency to probe inconsistent handling.",
+    "agent_task": "Ensure idempotent request handling preserves original payment intent semantics.",
+    "correct_behavior": "1) Bind idempotency key to immutable request fingerprint (amount, currency, recipient, network). 2) Return original result when key repeats with identical payload. 3) Reject key reuse with mismatched payload.",
+    "failure_risk": "Unexpected invoice mutation and potential unauthorized amount changes.",
+    "category": "security"
+  },
+  {
+    "title": "Multiple Transfers in One Transaction Overcount",
+    "scenario": "Single transaction emits multiple token transfers involving the merchant, and naive logic sums unrelated legs as one payment.",
+    "agent_task": "Compute invoice-settling amount from complex transfer events safely.",
+    "correct_behavior": "1) Filter transfers by exact token contract and destination <WALLET_ADDRESS>. 2) Include only legs attributable to payer-to-merchant settlement for that invoice. 3) Ignore unrelated internal or third-party transfers in same transaction.",
+    "failure_risk": "Invoice can be falsely satisfied through transaction structure tricks.",
+    "category": "validation"
+  },
+  {
+    "title": "Byzantine RPC Provider Data Poisoning",
+    "scenario": "One compromised RPC node reports fabricated receipt status while others disagree.",
+    "agent_task": "Trust chain data safely when providers conflict.",
+    "correct_behavior": "1) Query multiple independent providers. 2) Require quorum/consensus on critical fields (status, block, logs). 3) Quarantine outlier provider and avoid final settlement on single-source truth.",
+    "failure_risk": "Fraudulent confirmations and direct financial loss.",
+    "category": "rpc"
+  },
+  {
+    "title": "Address Book Poisoning in Merchant Config",
+    "scenario": "An attacker obtains limited panel access and swaps payout/recipient config to another <WALLET_ADDRESS> before invoices are generated.",
+    "agent_task": "Prevent compromised configuration from silently redirecting funds.",
+    "correct_behavior": "1) Enforce change controls for critical wallet config (approval, audit log, cooldown). 2) Validate destination against organization allowlist at settlement time. 3) Block high-risk config changes from taking immediate effect without review.",
+    "failure_risk": "Payments are routed to attacker-controlled wallets.",
+    "category": "security"
+  },
+  {
+    "title": "Cross-Tenant Webhook Endpoint Confusion",
+    "scenario": "A valid webhook for merchant A is posted to merchant B endpoint due to routing mistake or abuse attempt.",
+    "agent_task": "Apply webhook events only to the intended tenant context.",
+    "correct_behavior": "1) Bind signature secret and endpoint identity to a single tenant. 2) Verify event ownership before mutating invoice state. 3) Reject cross-tenant payloads even with structurally valid signatures.",
+    "failure_risk": "One merchant can have invoices altered by another merchant event stream.",
+    "category": "security"
+  }
+]

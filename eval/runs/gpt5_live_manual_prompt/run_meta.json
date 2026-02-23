@@ -1,0 +1,5 @@
+{
+  "run_type": "manual_live_model_output",
+  "valid_for_leaderboard": false,
+  "notes": "Assistant-generated live outputs in-session; useful as reference run, not blinded external leaderboard evidence."
+}

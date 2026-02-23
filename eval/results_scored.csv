@@ -1,0 +1,21 @@
+case_id,title,category,severity,expected_decision,decision,decision_match,format_ok,req1_met,req2_met,req3_met,af1_triggered,af2_triggered,pass_fail,mistake_type,notes
+C01,Cross-Network Transaction Hash Misbinding,validation,high,reject,reject,1,1,1,1,1,0,0,PASS,none,smoke test
+C02,Token Decimal Misinterpretation (6 vs 18),accounting,high,reject,reject,1,1,1,1,1,0,0,PASS,none,smoke test
+C03,Token Spoofing with Identical Symbol,security,critical,reject,reject,1,1,1,1,1,0,0,PASS,none,smoke test
+C04,Wrong Recipient but Correct Amount,validation,high,reject,reject,1,1,1,1,1,0,0,PASS,none,smoke test
+C05,Webhook Replay via Reused Nonce,security,critical,reject,reject,1,1,1,1,1,0,0,PASS,none,smoke test
+C06,RPC Timeout Misclassified as Payment Failure,rpc,medium,pending,pending,1,1,1,1,1,0,0,PASS,none,smoke test
+C07,Conflicting RPC Views of Confirmation Height,rpc,high,pending,pending,1,1,1,1,1,0,0,PASS,none,smoke test
+C08,Post-Confirmation Reorg Double Spend,security,critical,reject,reject,1,1,1,1,1,0,0,PASS,none,smoke test
+C09,Concurrent Attach Race on Same Transaction,edge_case,critical,reject,reject,1,1,1,1,1,0,0,PASS,none,smoke test
+C10,Production Invoice Settled by Testnet Payment,accounting,critical,reject,reject,1,1,1,1,1,0,0,PASS,none,smoke test
+C11,Null Receipt Interpreted as Success,rpc,high,pending,pending,1,1,1,1,1,0,0,PASS,none,smoke test
+C12,Approval Transaction Misread as Payment,security,high,reject,reject,1,1,1,1,1,0,0,PASS,none,smoke test
+C13,Bitcoin Change Output Misattribution,validation,high,reject,reject,1,1,1,1,1,0,0,PASS,none,smoke test
+C14,Invoice Expiry Boundary Race,edge_case,medium,reject,reject,1,1,1,1,1,0,0,PASS,none,smoke test
+C15,Unconfirmed Payment Treated as Final,validation,high,pending,pending,1,1,1,1,1,0,0,PASS,none,smoke test
+C16,Manual Override vs Auto-Confirmation Race,edge_case,high,pending,pending,1,1,1,1,1,0,0,PASS,none,smoke test
+C17,Idempotency Key Reuse Across Different Amounts,security,high,reject,reject,1,1,1,1,1,0,0,PASS,none,smoke test
+C18,Multiple Transfers in One Transaction Overcount,validation,high,reject,reject,1,1,1,1,1,0,0,PASS,none,smoke test
+C19,Byzantine RPC Provider Data Poisoning,rpc,critical,pending,pending,1,1,1,1,1,0,0,PASS,none,smoke test
+C20,Cross-Tenant Webhook Endpoint Confusion,security,critical,reject,reject,1,1,1,1,1,0,0,PASS,none,smoke test

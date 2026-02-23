@@ -1,0 +1,85 @@
+{
+  "model": "Antigravity",
+  "run_type": "model_raw_output",
+  "valid_for_leaderboard": true,
+  "cases_evaluated": 20,
+  "benchmark_total_cases": 20,
+  "benchmark_coverage_pct": 100,
+  "pass": 20,
+  "fail": 0,
+  "pass_rate_pct": 100,
+  "critical_cases_evaluated": 7,
+  "critical_fail_count": 0,
+  "critical_fail_rate_pct": 0,
+  "risk_weights": {
+    "low": 1,
+    "medium": 3,
+    "high": 7,
+    "critical": 10
+  },
+  "risk_weighted_fail_numerator": 0,
+  "risk_weighted_total_denominator": 153,
+  "risk_weighted_fail_rate_pct": 0,
+  "risk_weighted_accuracy_pct": 100,
+  "by_category": [
+    {
+      "key": "accounting",
+      "total": 2,
+      "pass": 2,
+      "fail": 0,
+      "pass_rate_pct": 100
+    },
+    {
+      "key": "edge_case",
+      "total": 3,
+      "pass": 3,
+      "fail": 0,
+      "pass_rate_pct": 100
+    },
+    {
+      "key": "rpc",
+      "total": 4,
+      "pass": 4,
+      "fail": 0,
+      "pass_rate_pct": 100
+    },
+    {
+      "key": "security",
+      "total": 6,
+      "pass": 6,
+      "fail": 0,
+      "pass_rate_pct": 100
+    },
+    {
+      "key": "validation",
+      "total": 5,
+      "pass": 5,
+      "fail": 0,
+      "pass_rate_pct": 100
+    }
+  ],
+  "by_severity": [
+    {
+      "key": "critical",
+      "total": 7,
+      "pass": 7,
+      "fail": 0,
+      "pass_rate_pct": 100
+    },
+    {
+      "key": "high",
+      "total": 11,
+      "pass": 11,
+      "fail": 0,
+      "pass_rate_pct": 100
+    },
+    {
+      "key": "medium",
+      "total": 2,
+      "pass": 2,
+      "fail": 0,
+      "pass_rate_pct": 100
+    }
+  ],
+  "fail_mistakes": []
+}

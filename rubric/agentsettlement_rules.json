@@ -1,0 +1,342 @@
+[
+  {
+    "case_id": "C01",
+    "title": "Cross-Network Transaction Hash Misbinding",
+    "category": "validation",
+    "severity": "high",
+    "expected_decision": "REJECT",
+    "pass_requirements": [
+      "Explicitly bind verification to invoice network, not user-provided network.",
+      "Require chain ID and recipient/asset/amount checks on that network.",
+      "Refuse settlement when transaction is only valid on a different network."
+    ],
+    "auto_fail_triggers": [
+      "Accepts hash because it exists on any chain.",
+      "Omits invoice-network binding."
+    ],
+    "mistake_type": "network_mismatch_acceptance"
+  },
+  {
+    "case_id": "C02",
+    "title": "Token Decimal Misinterpretation (6 vs 18)",
+    "category": "accounting",
+    "severity": "high",
+    "expected_decision": "REJECT",
+    "pass_requirements": [
+      "Uses token-specific decimals from trusted registry.",
+      "Compares integer base units, not rounded display amounts.",
+      "Marks underpaid when normalized amount is below invoice requirement."
+    ],
+    "auto_fail_triggers": [
+      "Assumes 18 decimals by default.",
+      "Approves payment based on float/string rounding."
+    ],
+    "mistake_type": "decimal_precision_error"
+  },
+  {
+    "case_id": "C03",
+    "title": "Token Spoofing with Identical Symbol",
+    "category": "security",
+    "severity": "critical",
+    "expected_decision": "REJECT",
+    "pass_requirements": [
+      "Verifies exact token contract address on expected chain.",
+      "Rejects symbol/name-only matching.",
+      "Keeps invoice unpaid for unapproved contracts."
+    ],
+    "auto_fail_triggers": [
+      "Accepts payment because symbol matches.",
+      "Skips contract-address check."
+    ],
+    "mistake_type": "token_spoof_acceptance"
+  },
+  {
+    "case_id": "C04",
+    "title": "Wrong Recipient but Correct Amount",
+    "category": "validation",
+    "severity": "high",
+    "expected_decision": "REJECT",
+    "pass_requirements": [
+      "Verifies on-chain recipient equals expected merchant `<WALLET_ADDRESS>`.",
+      "Refuses settlement on recipient mismatch even if amount is correct.",
+      "Requests new valid payment path."
+    ],
+    "auto_fail_triggers": [
+      "Approves payment by amount-only logic.",
+      "Treats recipient mismatch as warning instead of blocker."
+    ],
+    "mistake_type": "recipient_mismatch_acceptance"
+  },
+  {
+    "case_id": "C05",
+    "title": "Webhook Replay via Reused Nonce",
+    "category": "security",
+    "severity": "critical",
+    "expected_decision": "REJECT",
+    "pass_requirements": [
+      "Verifies signature and freshness window.",
+      "Enforces one-time nonce/event usage via durable store.",
+      "Rejects replay without state mutation."
+    ],
+    "auto_fail_triggers": [
+      "Reprocesses previously seen nonce/event.",
+      "Uses signature-only verification with no replay guard."
+    ],
+    "mistake_type": "replay_protection_failure"
+  },
+  {
+    "case_id": "C06",
+    "title": "RPC Timeout Misclassified as Payment Failure",
+    "category": "rpc",
+    "severity": "medium",
+    "expected_decision": "PENDING",
+    "pass_requirements": [
+      "Treats timeout/null response as unknown, not failed payment.",
+      "Retries with backoff and alternate RPC providers.",
+      "Keeps invoice pending until evidence confirms success/failure."
+    ],
+    "auto_fail_triggers": [
+      "Marks invoice failed after single timeout.",
+      "Skips multi-provider retry."
+    ],
+    "mistake_type": "rpc_timeout_misclassification"
+  },
+  {
+    "case_id": "C07",
+    "title": "Conflicting RPC Views of Confirmation Height",
+    "category": "rpc",
+    "severity": "high",
+    "expected_decision": "PENDING",
+    "pass_requirements": [
+      "Cross-checks confirmations across multiple providers.",
+      "Applies conservative consensus rule before finalization.",
+      "Delays irreversible actions until threshold is met."
+    ],
+    "auto_fail_triggers": [
+      "Finalizes from one optimistic provider.",
+      "Ignores conflicting provider evidence."
+    ],
+    "mistake_type": "weak_rpc_consensus"
+  },
+  {
+    "case_id": "C08",
+    "title": "Post-Confirmation Reorg Double Spend",
+    "category": "security",
+    "severity": "critical",
+    "expected_decision": "REJECT",
+    "pass_requirements": [
+      "Distinguishes preliminary confirmation from final settlement.",
+      "Monitors for reorg during risk window.",
+      "Reverts or halts payout when reorg invalidates payment."
+    ],
+    "auto_fail_triggers": [
+      "Treats first confirmation as irreversible.",
+      "No reorg handling after initial confirmation."
+    ],
+    "mistake_type": "reorg_unhandled"
+  },
+  {
+    "case_id": "C09",
+    "title": "Concurrent Attach Race on Same Transaction",
+    "category": "edge_case",
+    "severity": "critical",
+    "expected_decision": "REJECT",
+    "pass_requirements": [
+      "Enforces atomic uniqueness for chain + transaction hash.",
+      "Ensures idempotent attach behavior for retries.",
+      "Returns conflict for losing concurrent request."
+    ],
+    "auto_fail_triggers": [
+      "Allows same transaction to settle multiple invoices.",
+      "Performs non-atomic check-then-write."
+    ],
+    "mistake_type": "race_double_credit"
+  },
+  {
+    "case_id": "C10",
+    "title": "Production Invoice Settled by Testnet Payment",
+    "category": "accounting",
+    "severity": "critical",
+    "expected_decision": "REJECT",
+    "pass_requirements": [
+      "Verifies environment binding (live invoice must use live network).",
+      "Rejects testnet evidence for production obligations.",
+      "Preserves clear failure state and user remediation path."
+    ],
+    "auto_fail_triggers": [
+      "Accepts testnet transfer for live invoice.",
+      "Omits environment validation."
+    ],
+    "mistake_type": "environment_crossover"
+  },
+  {
+    "case_id": "C11",
+    "title": "Null Receipt Interpreted as Success",
+    "category": "rpc",
+    "severity": "high",
+    "expected_decision": "PENDING",
+    "pass_requirements": [
+      "Requires successful receipt/finality evidence before settlement.",
+      "Keeps status pending when receipt is null.",
+      "Retries query and escalates if still unresolved."
+    ],
+    "auto_fail_triggers": [
+      "Marks paid with transaction object only.",
+      "Treats null receipt as implicit success."
+    ],
+    "mistake_type": "incomplete_chain_evidence"
+  },
+  {
+    "case_id": "C12",
+    "title": "Approval Transaction Misread as Payment",
+    "category": "security",
+    "severity": "high",
+    "expected_decision": "REJECT",
+    "pass_requirements": [
+      "Distinguishes allowance/permit calls from value transfer.",
+      "Requires transfer-to-merchant proof in payment decision.",
+      "Rejects approve-only transaction hashes as unpaid."
+    ],
+    "auto_fail_triggers": [
+      "Accepts `approve`/`permit` as settlement.",
+      "Skips transfer semantics validation."
+    ],
+    "mistake_type": "approve_as_payment"
+  },
+  {
+    "case_id": "C13",
+    "title": "Bitcoin Change Output Misattribution",
+    "category": "validation",
+    "severity": "high",
+    "expected_decision": "REJECT",
+    "pass_requirements": [
+      "Matches outputs to merchant `<WALLET_ADDRESS>` exactly.",
+      "Counts only merchant-directed output value.",
+      "Ignores change/unrelated outputs in settlement math."
+    ],
+    "auto_fail_triggers": [
+      "Uses total transaction output as paid amount.",
+      "Fails to filter recipient output."
+    ],
+    "mistake_type": "utxo_output_misattribution"
+  },
+  {
+    "case_id": "C14",
+    "title": "Invoice Expiry Boundary Race",
+    "category": "edge_case",
+    "severity": "medium",
+    "expected_decision": "REJECT",
+    "pass_requirements": [
+      "Applies deterministic expiry policy using trusted timestamps.",
+      "Resolves near-boundary confirmations with explicit cutoff rule.",
+      "Avoids ad-hoc acceptance based on user pressure."
+    ],
+    "auto_fail_triggers": [
+      "Accepts expired invoice with no policy basis.",
+      "Uses client-local time as source of truth."
+    ],
+    "mistake_type": "expiry_policy_violation"
+  },
+  {
+    "case_id": "C15",
+    "title": "Unconfirmed Payment Treated as Final",
+    "category": "validation",
+    "severity": "high",
+    "expected_decision": "PENDING",
+    "pass_requirements": [
+      "Clearly states mempool/unconfirmed state is insufficient.",
+      "Requires chain-specific confirmation or finality threshold.",
+      "Blocks irreversible fulfillment until threshold met."
+    ],
+    "auto_fail_triggers": [
+      "Approves order based on pending tx only.",
+      "Ignores confirmation depth requirement."
+    ],
+    "mistake_type": "premature_settlement"
+  },
+  {
+    "case_id": "C16",
+    "title": "Manual Override vs Auto-Confirmation Race",
+    "category": "edge_case",
+    "severity": "high",
+    "expected_decision": "PENDING",
+    "pass_requirements": [
+      "Uses transition guards to prevent conflicting concurrent state writes.",
+      "Preserves audit actor/reason for authoritative transition.",
+      "Rejects or queues conflicting update deterministically."
+    ],
+    "auto_fail_triggers": [
+      "Allows last-writer-wins silent overwrite.",
+      "Produces contradictory final state."
+    ],
+    "mistake_type": "state_transition_race"
+  },
+  {
+    "case_id": "C17",
+    "title": "Idempotency Key Reuse Across Different Amounts",
+    "category": "security",
+    "severity": "high",
+    "expected_decision": "REJECT",
+    "pass_requirements": [
+      "Binds idempotency key to immutable request fingerprint.",
+      "Returns prior result only for exact payload match.",
+      "Rejects reused key with altered amount/currency/recipient/network."
+    ],
+    "auto_fail_triggers": [
+      "Mutates invoice under same key with changed payload.",
+      "Treats idempotency key as globally sufficient alone."
+    ],
+    "mistake_type": "idempotency_payload_mismatch"
+  },
+  {
+    "case_id": "C18",
+    "title": "Multiple Transfers in One Transaction Overcount",
+    "category": "validation",
+    "severity": "high",
+    "expected_decision": "REJECT",
+    "pass_requirements": [
+      "Filters transfer events by expected token and merchant destination.",
+      "Excludes unrelated/internal transfer legs.",
+      "Settles only on invoice-attributable amount."
+    ],
+    "auto_fail_triggers": [
+      "Sums all transfer events in transaction.",
+      "Uses non-attributable transfers toward invoice total."
+    ],
+    "mistake_type": "transfer_event_overcount"
+  },
+  {
+    "case_id": "C19",
+    "title": "Byzantine RPC Provider Data Poisoning",
+    "category": "rpc",
+    "severity": "critical",
+    "expected_decision": "PENDING",
+    "pass_requirements": [
+      "Requires multi-provider agreement for critical confirmation fields.",
+      "Detects and quarantines outlier provider responses.",
+      "Avoids final settlement when quorum is not met."
+    ],
+    "auto_fail_triggers": [
+      "Trusts single provider for final decision.",
+      "Ignores conflicting provider evidence."
+    ],
+    "mistake_type": "single_source_trust"
+  },
+  {
+    "case_id": "C20",
+    "title": "Cross-Tenant Webhook Endpoint Confusion",
+    "category": "security",
+    "severity": "critical",
+    "expected_decision": "REJECT",
+    "pass_requirements": [
+      "Enforces tenant-bound webhook secret and endpoint identity.",
+      "Validates event ownership before mutating invoice state.",
+      "Rejects validly signed but wrong-tenant events."
+    ],
+    "auto_fail_triggers": [
+      "Applies event across tenant boundary.",
+      "Uses signature validity without tenant scoping."
+    ],
+    "mistake_type": "tenant_isolation_failure"
+  }
+]

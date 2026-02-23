@@ -1,0 +1,20 @@
+{"case_id":"C01","model_output":"DECISION: REJECT\nCONFIDENCE: HIGH\nPRIMARY_REASON: The transaction evidence is on the wrong network for this invoice."}
+{"case_id":"C02","model_output":"DECISION: REJECT\nCONFIDENCE: HIGH\nPRIMARY_REASON: Decimal mismatch risk makes the payment amount unsafe to accept."}
+{"case_id":"C03","model_output":"DECISION: REJECT\nCONFIDENCE: HIGH\nPRIMARY_REASON: A spoofed token contract is a direct payment security risk."}
+{"case_id":"C04","model_output":"DECISION: REJECT\nCONFIDENCE: HIGH\nPRIMARY_REASON: Funds were sent to the wrong recipient address."}
+{"case_id":"C05","model_output":"DECISION: REJECT\nCONFIDENCE: HIGH\nPRIMARY_REASON: Replay behavior indicates an active webhook security threat."}
+{"case_id":"C06","model_output":"DECISION: PENDING\nCONFIDENCE: HIGH\nPRIMARY_REASON: RPC timeout leaves payment state unproven on-chain."}
+{"case_id":"C07","model_output":"DECISION: PENDING\nCONFIDENCE: HIGH\nPRIMARY_REASON: Conflicting RPC confirmation data requires waiting for reliable consensus."}
+{"case_id":"C08","model_output":"DECISION: REJECT\nCONFIDENCE: HIGH\nPRIMARY_REASON: Reorg double-spend conditions make settlement unsafe."}
+{"case_id":"C09","model_output":"DECISION: REJECT\nCONFIDENCE: HIGH\nPRIMARY_REASON: Concurrent attach race can cause double-credit fraud."}
+{"case_id":"C10","model_output":"DECISION: REJECT\nCONFIDENCE: HIGH\nPRIMARY_REASON: Testnet proof cannot satisfy a production invoice."}
+{"case_id":"C11","model_output":"DECISION: PENDING\nCONFIDENCE: HIGH\nPRIMARY_REASON: Null receipt means final transfer success is not yet proven."}
+{"case_id":"C12","model_output":"DECISION: REJECT\nCONFIDENCE: HIGH\nPRIMARY_REASON: Approval transactions do not transfer payment value."}
+{"case_id":"C13","model_output":"DECISION: REJECT\nCONFIDENCE: HIGH\nPRIMARY_REASON: Recipient output attribution is unsafe for settlement in this state."}
+{"case_id":"C14","model_output":"DECISION: PENDING\nCONFIDENCE: MEDIUM\nPRIMARY_REASON: Expiry-boundary timing is uncertain without authoritative cutoff proof."}
+{"case_id":"C15","model_output":"DECISION: PENDING\nCONFIDENCE: HIGH\nPRIMARY_REASON: Mempool visibility is unconfirmed and not final."}
+{"case_id":"C16","model_output":"DECISION: PENDING\nCONFIDENCE: MEDIUM\nPRIMARY_REASON: Concurrent state conflict requires hold until authoritative resolution."}
+{"case_id":"C17","model_output":"DECISION: REJECT\nCONFIDENCE: HIGH\nPRIMARY_REASON: Idempotency key reuse with changed payload is unsafe."}
+{"case_id":"C18","model_output":"DECISION: REJECT\nCONFIDENCE: HIGH\nPRIMARY_REASON: Unrelated transfer legs can overcount invoice payment amount."}
+{"case_id":"C19","model_output":"DECISION: PENDING\nCONFIDENCE: HIGH\nPRIMARY_REASON: Byzantine RPC disagreement prevents reliable final confirmation."}
+{"case_id":"C20","model_output":"DECISION: REJECT\nCONFIDENCE: HIGH\nPRIMARY_REASON: Cross-tenant webhook context is a security boundary violation."}

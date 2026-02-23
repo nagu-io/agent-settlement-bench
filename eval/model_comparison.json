@@ -1,0 +1,545 @@
+{
+  "leaderboard": [
+    {
+      "run_id": "antigravity_run",
+      "model": "Antigravity",
+      "run_type": "model_raw_output",
+      "valid_for_leaderboard": true,
+      "cases_evaluated": 20,
+      "benchmark_total_cases": 20,
+      "benchmark_coverage_pct": 100,
+      "pass": 20,
+      "fail": 0,
+      "pass_rate_pct": 100,
+      "critical_cases_evaluated": 7,
+      "critical_fail_count": 0,
+      "critical_fail_rate_pct": 0,
+      "risk_weights": {
+        "low": 1,
+        "medium": 3,
+        "high": 7,
+        "critical": 10
+      },
+      "risk_weighted_fail_numerator": 0,
+      "risk_weighted_total_denominator": 153,
+      "risk_weighted_fail_rate_pct": 0,
+      "risk_weighted_accuracy_pct": 100,
+      "by_category": [
+        {
+          "key": "accounting",
+          "total": 2,
+          "pass": 2,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "edge_case",
+          "total": 3,
+          "pass": 3,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "rpc",
+          "total": 4,
+          "pass": 4,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "security",
+          "total": 6,
+          "pass": 6,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "validation",
+          "total": 5,
+          "pass": 5,
+          "fail": 0,
+          "pass_rate_pct": 100
+        }
+      ],
+      "by_severity": [
+        {
+          "key": "critical",
+          "total": 7,
+          "pass": 7,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "high",
+          "total": 11,
+          "pass": 11,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "medium",
+          "total": 2,
+          "pass": 2,
+          "fail": 0,
+          "pass_rate_pct": 100
+        }
+      ],
+      "fail_mistakes": []
+    }
+  ],
+  "reference": [
+    {
+      "run_id": "gpt5_live_manual_prompt",
+      "model": "GPT-5-Live-Manual-Prompt",
+      "run_type": "manual_live_model_output",
+      "valid_for_leaderboard": false,
+      "cases_evaluated": 20,
+      "benchmark_total_cases": 20,
+      "benchmark_coverage_pct": 100,
+      "pass": 19,
+      "fail": 1,
+      "pass_rate_pct": 95,
+      "critical_cases_evaluated": 7,
+      "critical_fail_count": 0,
+      "critical_fail_rate_pct": 0,
+      "risk_weights": {
+        "low": 1,
+        "medium": 3,
+        "high": 7,
+        "critical": 10
+      },
+      "risk_weighted_fail_numerator": 3,
+      "risk_weighted_total_denominator": 153,
+      "risk_weighted_fail_rate_pct": 2,
+      "risk_weighted_accuracy_pct": 98,
+      "by_category": [
+        {
+          "key": "accounting",
+          "total": 2,
+          "pass": 2,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "edge_case",
+          "total": 3,
+          "pass": 2,
+          "fail": 1,
+          "pass_rate_pct": 66.7
+        },
+        {
+          "key": "rpc",
+          "total": 4,
+          "pass": 4,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "security",
+          "total": 6,
+          "pass": 6,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "validation",
+          "total": 5,
+          "pass": 5,
+          "fail": 0,
+          "pass_rate_pct": 100
+        }
+      ],
+      "by_severity": [
+        {
+          "key": "critical",
+          "total": 7,
+          "pass": 7,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "high",
+          "total": 11,
+          "pass": 11,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "medium",
+          "total": 2,
+          "pass": 1,
+          "fail": 1,
+          "pass_rate_pct": 50
+        }
+      ],
+      "fail_mistakes": [
+        {
+          "mistake_type": "expiry_policy_violation",
+          "count": 1
+        }
+      ],
+      "notes": "Assistant-generated live outputs in-session; useful as reference run, not blinded external leaderboard evidence."
+    },
+    {
+      "run_id": "rule_strong_baseline",
+      "model": "Strong-Rule-Baseline",
+      "cases_evaluated": 20,
+      "benchmark_total_cases": 20,
+      "benchmark_coverage_pct": 100,
+      "pass": 19,
+      "fail": 1,
+      "pass_rate_pct": 95,
+      "critical_cases_evaluated": 7,
+      "critical_fail_count": 0,
+      "critical_fail_rate_pct": 0,
+      "risk_weights": {
+        "low": 1,
+        "medium": 3,
+        "high": 7,
+        "critical": 10
+      },
+      "risk_weighted_fail_numerator": 3,
+      "risk_weighted_total_denominator": 153,
+      "risk_weighted_fail_rate_pct": 2,
+      "risk_weighted_accuracy_pct": 98,
+      "by_category": [
+        {
+          "key": "accounting",
+          "total": 2,
+          "pass": 2,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "edge_case",
+          "total": 3,
+          "pass": 3,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "rpc",
+          "total": 4,
+          "pass": 3,
+          "fail": 1,
+          "pass_rate_pct": 75
+        },
+        {
+          "key": "security",
+          "total": 6,
+          "pass": 6,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "validation",
+          "total": 5,
+          "pass": 5,
+          "fail": 0,
+          "pass_rate_pct": 100
+        }
+      ],
+      "by_severity": [
+        {
+          "key": "critical",
+          "total": 7,
+          "pass": 7,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "high",
+          "total": 11,
+          "pass": 11,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "medium",
+          "total": 2,
+          "pass": 1,
+          "fail": 1,
+          "pass_rate_pct": 50
+        }
+      ],
+      "fail_mistakes": [
+        {
+          "mistake_type": "rpc_timeout_misclassification",
+          "count": 1
+        }
+      ],
+      "run_type": "synthetic_baseline",
+      "valid_for_leaderboard": false,
+      "notes": "Deterministic policy baseline, not model output."
+    },
+    {
+      "run_id": "gpt5_round1_sample",
+      "model": "GPT-5-Round1-Sample",
+      "cases_evaluated": 10,
+      "benchmark_total_cases": 20,
+      "benchmark_coverage_pct": 50,
+      "pass": 5,
+      "fail": 5,
+      "pass_rate_pct": 50,
+      "critical_cases_evaluated": 5,
+      "critical_fail_count": 2,
+      "critical_fail_rate_pct": 40,
+      "risk_weights": {
+        "low": 1,
+        "medium": 3,
+        "high": 7,
+        "critical": 10
+      },
+      "risk_weighted_fail_numerator": 37,
+      "risk_weighted_total_denominator": 81,
+      "risk_weighted_fail_rate_pct": 45.7,
+      "risk_weighted_accuracy_pct": 54.3,
+      "by_category": [
+        {
+          "key": "edge_case",
+          "total": 1,
+          "pass": 0,
+          "fail": 1,
+          "pass_rate_pct": 0
+        },
+        {
+          "key": "rpc",
+          "total": 3,
+          "pass": 0,
+          "fail": 3,
+          "pass_rate_pct": 0
+        },
+        {
+          "key": "security",
+          "total": 4,
+          "pass": 3,
+          "fail": 1,
+          "pass_rate_pct": 75
+        },
+        {
+          "key": "validation",
+          "total": 2,
+          "pass": 2,
+          "fail": 0,
+          "pass_rate_pct": 100
+        }
+      ],
+      "by_severity": [
+        {
+          "key": "critical",
+          "total": 5,
+          "pass": 3,
+          "fail": 2,
+          "pass_rate_pct": 60
+        },
+        {
+          "key": "high",
+          "total": 4,
+          "pass": 2,
+          "fail": 2,
+          "pass_rate_pct": 50
+        },
+        {
+          "key": "medium",
+          "total": 1,
+          "pass": 0,
+          "fail": 1,
+          "pass_rate_pct": 0
+        }
+      ],
+      "fail_mistakes": [
+        {
+          "mistake_type": "rpc_timeout_misclassification",
+          "count": 1
+        },
+        {
+          "mistake_type": "race_double_credit",
+          "count": 1
+        },
+        {
+          "mistake_type": "incomplete_chain_evidence",
+          "count": 1
+        },
+        {
+          "mistake_type": "idempotency_payload_mismatch",
+          "count": 1
+        },
+        {
+          "mistake_type": "single_source_trust",
+          "count": 1
+        }
+      ],
+      "run_type": "manual_sample",
+      "valid_for_leaderboard": false,
+      "notes": "Manual sampled evaluation (10/20), not full raw-output run."
+    },
+    {
+      "run_id": "always_settle_baseline",
+      "model": "Weak-Open-Baseline",
+      "cases_evaluated": 20,
+      "benchmark_total_cases": 20,
+      "benchmark_coverage_pct": 100,
+      "pass": 0,
+      "fail": 20,
+      "pass_rate_pct": 0,
+      "critical_cases_evaluated": 7,
+      "critical_fail_count": 7,
+      "critical_fail_rate_pct": 100,
+      "risk_weights": {
+        "low": 1,
+        "medium": 3,
+        "high": 7,
+        "critical": 10
+      },
+      "risk_weighted_fail_numerator": 153,
+      "risk_weighted_total_denominator": 153,
+      "risk_weighted_fail_rate_pct": 100,
+      "risk_weighted_accuracy_pct": 0,
+      "by_category": [
+        {
+          "key": "accounting",
+          "total": 2,
+          "pass": 0,
+          "fail": 2,
+          "pass_rate_pct": 0
+        },
+        {
+          "key": "edge_case",
+          "total": 3,
+          "pass": 0,
+          "fail": 3,
+          "pass_rate_pct": 0
+        },
+        {
+          "key": "rpc",
+          "total": 4,
+          "pass": 0,
+          "fail": 4,
+          "pass_rate_pct": 0
+        },
+        {
+          "key": "security",
+          "total": 6,
+          "pass": 0,
+          "fail": 6,
+          "pass_rate_pct": 0
+        },
+        {
+          "key": "validation",
+          "total": 5,
+          "pass": 0,
+          "fail": 5,
+          "pass_rate_pct": 0
+        }
+      ],
+      "by_severity": [
+        {
+          "key": "critical",
+          "total": 7,
+          "pass": 0,
+          "fail": 7,
+          "pass_rate_pct": 0
+        },
+        {
+          "key": "high",
+          "total": 11,
+          "pass": 0,
+          "fail": 11,
+          "pass_rate_pct": 0
+        },
+        {
+          "key": "medium",
+          "total": 2,
+          "pass": 0,
+          "fail": 2,
+          "pass_rate_pct": 0
+        }
+      ],
+      "fail_mistakes": [
+        {
+          "mistake_type": "network_mismatch_acceptance",
+          "count": 1
+        },
+        {
+          "mistake_type": "decimal_precision_error",
+          "count": 1
+        },
+        {
+          "mistake_type": "token_spoof_acceptance",
+          "count": 1
+        },
+        {
+          "mistake_type": "recipient_mismatch_acceptance",
+          "count": 1
+        },
+        {
+          "mistake_type": "replay_protection_failure",
+          "count": 1
+        },
+        {
+          "mistake_type": "rpc_timeout_misclassification",
+          "count": 1
+        },
+        {
+          "mistake_type": "weak_rpc_consensus",
+          "count": 1
+        },
+        {
+          "mistake_type": "reorg_unhandled",
+          "count": 1
+        },
+        {
+          "mistake_type": "race_double_credit",
+          "count": 1
+        },
+        {
+          "mistake_type": "environment_crossover",
+          "count": 1
+        },
+        {
+          "mistake_type": "incomplete_chain_evidence",
+          "count": 1
+        },
+        {
+          "mistake_type": "approve_as_payment",
+          "count": 1
+        },
+        {
+          "mistake_type": "utxo_output_misattribution",
+          "count": 1
+        },
+        {
+          "mistake_type": "expiry_policy_violation",
+          "count": 1
+        },
+        {
+          "mistake_type": "premature_settlement",
+          "count": 1
+        },
+        {
+          "mistake_type": "state_transition_race",
+          "count": 1
+        },
+        {
+          "mistake_type": "idempotency_payload_mismatch",
+          "count": 1
+        },
+        {
+          "mistake_type": "transfer_event_overcount",
+          "count": 1
+        },
+        {
+          "mistake_type": "single_source_trust",
+          "count": 1
+        },
+        {
+          "mistake_type": "tenant_isolation_failure",
+          "count": 1
+        }
+      ],
+      "run_type": "synthetic_baseline",
+      "valid_for_leaderboard": false,
+      "notes": "Deterministic weak baseline, not model output."
+    }
+  ]
+}
