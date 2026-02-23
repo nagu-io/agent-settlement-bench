@@ -93,6 +93,10 @@ To prove this methodology generalizes, the benchmark executes this exact Safety 
 |------------|-------:|------------------:|-------------------:|
 | Codex      | 50.0%  | 30.0%             | 40.0%              |
 | Gemini 3.1 | 55.0%  | 28.6%             | 39.9%              |
+| Claude Haiku (Manual Open Reasoning Subset, 13/20) | 84.6% | 0.0% | 15.0% |
+| ChatGPT-4.1 (Open Reasoning Subset, 10/20) | 90.0% | 0.0% | 9.0% |
+
+Subset rows are manual samples and are not leaderboard-eligible.
 
 Both models exhibit similar failure patterns, suggesting the failure pattern may generalize across models rather than being unique to a single system.
 
