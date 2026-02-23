@@ -11,6 +11,7 @@ const STANDARD_OUTPUT_CONTRACT = [
   'CONFIDENCE: LOW | MEDIUM | HIGH',
   'PRIMARY_REASON: one short sentence',
 ].join('\n');
+const VALID_DECISIONS = new Set(['SETTLE', 'REJECT', 'PENDING']);
 
 function normalizeNewlines(text) {
   return text.replace(/\r\n/g, '\n');
@@ -78,6 +79,78 @@ function loadBenchmarkCases(benchmarkPath) {
   }));
 }
 
+function normalizeDecision(value) {
+  const normalized = String(value || '')
+    .trim()
+    .toUpperCase();
+  if (normalized === 'APPROVE') {
+    return 'SETTLE';
+  }
+  return VALID_DECISIONS.has(normalized) ? normalized : null;
+}
+
+function loadGroundTruthMap(groundTruthPath) {
+  const raw = JSON.parse(fs.readFileSync(groundTruthPath, 'utf8'));
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+    throw new Error(`Ground truth must be a JSON object: ${groundTruthPath}`);
+  }
+
+  const map = new Map();
+  for (const [caseId, decisionRaw] of Object.entries(raw)) {
+    if (!/^C\d{2}$/.test(caseId)) {
+      throw new Error(`Invalid case_id in ground truth: ${caseId}`);
+    }
+    const decision = normalizeDecision(decisionRaw);
+    if (!decision) {
+      throw new Error(
+        `Invalid ground truth decision for ${caseId}: ${decisionRaw}`
+      );
+    }
+    map.set(caseId, decision);
+  }
+  return map;
+}
+
+function validateGroundTruthCoverage(benchmarkCases, groundTruthMap) {
+  if (benchmarkCases.length !== groundTruthMap.size) {
+    throw new Error(
+      `Benchmark/ground-truth size mismatch: ${benchmarkCases.length} vs ${groundTruthMap.size}`
+    );
+  }
+
+  const benchmarkCaseIds = new Set(benchmarkCases.map((item) => item.case_id));
+  for (const caseId of benchmarkCaseIds) {
+    if (!groundTruthMap.has(caseId)) {
+      throw new Error(`Missing ground truth decision for ${caseId}`);
+    }
+  }
+  for (const caseId of groundTruthMap.keys()) {
+    if (!benchmarkCaseIds.has(caseId)) {
+      throw new Error(`Ground truth contains unknown case_id: ${caseId}`);
+    }
+  }
+}
+
+function validateGroundTruthRubricConsistency(rubricCases, groundTruthMap) {
+  for (const rubric of rubricCases) {
+    if (!groundTruthMap.has(rubric.case_id)) {
+      throw new Error(`Missing ground truth decision for ${rubric.case_id}`);
+    }
+    const rubricDecision = normalizeDecision(rubric.expected_decision);
+    const groundTruthDecision = groundTruthMap.get(rubric.case_id);
+    if (!rubricDecision) {
+      throw new Error(
+        `Invalid expected decision in rubric for ${rubric.case_id}: ${rubric.expected_decision}`
+      );
+    }
+    if (rubricDecision !== groundTruthDecision) {
+      throw new Error(
+        `Ground truth/rubric mismatch for ${rubric.case_id}: ground_truth="${groundTruthDecision}" rubric="${rubricDecision}"`
+      );
+    }
+  }
+}
+
 function resolvePaths() {
   const benchmarkRoot = path.resolve(__dirname, '../..');
   return {
@@ -87,6 +160,7 @@ function resolvePaths() {
       'ai_benchmark',
       'agentsettlement_benchmark.json'
     ),
+    groundTruthPath: path.join(benchmarkRoot, 'ai_benchmark', 'ground_truth.json'),
     rubricPath: path.join(benchmarkRoot, 'rubric', 'agentsettlement_rules.md'),
     evalDir: path.join(benchmarkRoot, 'eval'),
   };
@@ -154,8 +228,12 @@ module.exports = {
   STANDARD_SYSTEM_PROMPT,
   buildPrompt,
   buildUserPrompt,
+  loadGroundTruthMap,
   loadBenchmarkCases,
+  normalizeDecision,
   parseRubricMarkdown,
   resolvePaths,
+  validateGroundTruthCoverage,
+  validateGroundTruthRubricConsistency,
   validateRubricAlignment,
 };

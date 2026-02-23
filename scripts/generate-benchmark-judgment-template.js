@@ -1,9 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 const {
+  loadGroundTruthMap,
   loadBenchmarkCases,
   parseRubricMarkdown,
   resolvePaths,
+  validateGroundTruthCoverage,
+  validateGroundTruthRubricConsistency,
   validateRubricAlignment,
 } = require('./lib/agentsettlementRubric');
 
@@ -22,13 +25,15 @@ function toCsv(rows) {
 }
 
 function main() {
-  const { benchmarkPath, rubricPath, evalDir } = resolvePaths();
+  const { benchmarkPath, groundTruthPath, rubricPath, evalDir } = resolvePaths();
   const benchmarkCases = loadBenchmarkCases(benchmarkPath);
+  const groundTruthById = loadGroundTruthMap(groundTruthPath);
   const rubricCases = parseRubricMarkdown(rubricPath);
+  validateGroundTruthCoverage(benchmarkCases, groundTruthById);
   validateRubricAlignment(benchmarkCases, rubricCases);
+  validateGroundTruthRubricConsistency(rubricCases, groundTruthById);
   fs.mkdirSync(evalDir, { recursive: true });
 
-  const rubricById = new Map(rubricCases.map((item) => [item.case_id, item]));
   const header = [
     'case_id',
     'title',
@@ -48,13 +53,12 @@ function main() {
 
   const rows = [header];
   for (const item of benchmarkCases) {
-    const rule = rubricById.get(item.case_id);
     rows.push([
       item.case_id,
       item.title,
       item.category,
       item.severity,
-      String(rule.expected_decision || '').toUpperCase(),
+      groundTruthById.get(item.case_id),
       '',
       '',
       '',

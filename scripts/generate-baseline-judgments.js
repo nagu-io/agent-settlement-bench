@@ -1,9 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 const {
+  loadGroundTruthMap,
   loadBenchmarkCases,
+  normalizeDecision,
   parseRubricMarkdown,
   resolvePaths,
+  validateGroundTruthCoverage,
+  validateGroundTruthRubricConsistency,
   validateRubricAlignment,
 } = require('./lib/agentsettlementRubric');
 
@@ -38,14 +42,6 @@ function toCsv(rows) {
     .join('\n');
 }
 
-function normalizeDecision(raw) {
-  const v = String(raw || '')
-    .trim()
-    .toUpperCase();
-  if (v === 'APPROVE') return 'SETTLE';
-  return v;
-}
-
 function getBaselineDecision(caseItem, baseline) {
   if (baseline === 'always_settle') {
     return 'SETTLE';
@@ -68,10 +64,13 @@ function main() {
     throw new Error('Missing --baseline');
   }
 
-  const { benchmarkPath, rubricPath, evalDir } = resolvePaths();
+  const { benchmarkPath, groundTruthPath, rubricPath, evalDir } = resolvePaths();
   const benchmarkCases = loadBenchmarkCases(benchmarkPath);
+  const groundTruthById = loadGroundTruthMap(groundTruthPath);
   const rubricCases = parseRubricMarkdown(rubricPath);
+  validateGroundTruthCoverage(benchmarkCases, groundTruthById);
   validateRubricAlignment(benchmarkCases, rubricCases);
+  validateGroundTruthRubricConsistency(rubricCases, groundTruthById);
 
   const rubricById = new Map(rubricCases.map((item) => [item.case_id, item]));
   const rows = [
@@ -95,7 +94,10 @@ function main() {
 
   for (const caseItem of benchmarkCases) {
     const rubric = rubricById.get(caseItem.case_id);
-    const expected = normalizeDecision(rubric.expected_decision);
+    const expected = normalizeDecision(groundTruthById.get(caseItem.case_id));
+    if (!expected) {
+      throw new Error(`Invalid ground truth decision for ${caseItem.case_id}`);
+    }
     const decision = getBaselineDecision(caseItem, args.baseline);
     const decisionMatch = decision === expected;
 

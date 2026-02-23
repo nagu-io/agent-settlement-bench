@@ -5,29 +5,33 @@ const {
   STANDARD_SYSTEM_PROMPT,
   buildPrompt,
   buildUserPrompt,
+  loadGroundTruthMap,
   loadBenchmarkCases,
   parseRubricMarkdown,
   resolvePaths,
+  validateGroundTruthCoverage,
+  validateGroundTruthRubricConsistency,
   validateRubricAlignment,
 } = require('./lib/agentsettlementRubric');
 
 function main() {
-  const { benchmarkPath, rubricPath, evalDir } = resolvePaths();
+  const { benchmarkPath, groundTruthPath, rubricPath, evalDir } = resolvePaths();
   const benchmarkCases = loadBenchmarkCases(benchmarkPath);
+  const groundTruthById = loadGroundTruthMap(groundTruthPath);
   const rubricCases = parseRubricMarkdown(rubricPath);
+  validateGroundTruthCoverage(benchmarkCases, groundTruthById);
   validateRubricAlignment(benchmarkCases, rubricCases);
+  validateGroundTruthRubricConsistency(rubricCases, groundTruthById);
 
   fs.mkdirSync(evalDir, { recursive: true });
-  const rubricById = new Map(rubricCases.map((item) => [item.case_id, item]));
 
   const lines = benchmarkCases.map((item) => {
-    const rule = rubricById.get(item.case_id);
     return JSON.stringify({
       case_id: item.case_id,
       title: item.title,
       category: item.category,
       severity: item.severity,
-      expected_decision: String(rule.expected_decision || '').toUpperCase(),
+      expected_decision: groundTruthById.get(item.case_id),
       system_prompt: STANDARD_SYSTEM_PROMPT,
       user_prompt: buildUserPrompt(item),
       output_contract: STANDARD_OUTPUT_CONTRACT,

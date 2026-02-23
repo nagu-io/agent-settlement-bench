@@ -1,9 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 const {
+  loadGroundTruthMap,
   loadBenchmarkCases,
   parseRubricMarkdown,
   resolvePaths,
+  validateGroundTruthCoverage,
+  validateGroundTruthRubricConsistency,
   validateRubricAlignment,
 } = require('./lib/agentsettlementRubric');
 
@@ -291,7 +294,7 @@ function summaryToMarkdown(summary) {
 }
 
 function main() {
-  const { benchmarkPath, rubricPath, evalDir } = resolvePaths();
+  const { benchmarkPath, groundTruthPath, rubricPath, evalDir } = resolvePaths();
   const args = parseArgs(process.argv.slice(2));
   const inputPath = args.input
     ? path.resolve(args.input)
@@ -301,8 +304,11 @@ function main() {
   }
 
   const benchmarkCases = loadBenchmarkCases(benchmarkPath);
+  const groundTruthById = loadGroundTruthMap(groundTruthPath);
   const rubricCases = parseRubricMarkdown(rubricPath);
+  validateGroundTruthCoverage(benchmarkCases, groundTruthById);
   validateRubricAlignment(benchmarkCases, rubricCases);
+  validateGroundTruthRubricConsistency(rubricCases, groundTruthById);
   const rubricById = new Map(rubricCases.map((item) => [item.case_id, item]));
 
   const records = parseJsonl(inputPath);
@@ -324,9 +330,9 @@ function main() {
       throw new Error(`Unknown case_id: ${caseId}`);
     }
 
-    const expectedDecision = normalizeDecision(rubric.expected_decision);
+    const expectedDecision = normalizeDecision(groundTruthById.get(caseId));
     if (!expectedDecision) {
-      throw new Error(`Invalid rubric expected_decision for ${caseId}`);
+      throw new Error(`Invalid ground truth decision for ${caseId}`);
     }
 
     const parsed = extractModelOutput(record.model_output);

@@ -1,9 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 const {
+  loadGroundTruthMap,
   loadBenchmarkCases,
   parseRubricMarkdown,
   resolvePaths,
+  validateGroundTruthCoverage,
+  validateGroundTruthRubricConsistency,
   validateRubricAlignment,
 } = require('./lib/agentsettlementRubric');
 
@@ -298,11 +301,14 @@ function summaryToMarkdown(summary) {
 }
 
 function main() {
-  const { benchmarkPath, rubricPath, evalDir } = resolvePaths();
+  const { benchmarkPath, groundTruthPath, rubricPath, evalDir } = resolvePaths();
   const args = parseArgs(process.argv.slice(2));
   const benchmarkCases = loadBenchmarkCases(benchmarkPath);
+  const groundTruthById = loadGroundTruthMap(groundTruthPath);
   const rubricCases = parseRubricMarkdown(rubricPath);
+  validateGroundTruthCoverage(benchmarkCases, groundTruthById);
   validateRubricAlignment(benchmarkCases, rubricCases);
+  validateGroundTruthRubricConsistency(rubricCases, groundTruthById);
 
   const defaultInput = path.join(evalDir, 'judgments.csv');
   const inputPath = args.input ? path.resolve(args.input) : defaultInput;
@@ -338,11 +344,9 @@ function main() {
       );
     }
 
-    const expectedDecision = normalizeDecision(rubric.expected_decision);
+    const expectedDecision = normalizeDecision(groundTruthById.get(caseId));
     if (!expectedDecision) {
-      throw new Error(
-        `${caseId}: invalid expected decision in rubric "${rubric.expected_decision}"`
-      );
+      throw new Error(`${caseId}: invalid expected decision in ground truth`);
     }
 
     const formatOk = parseBool(row.format_ok, 'format_ok', caseId);

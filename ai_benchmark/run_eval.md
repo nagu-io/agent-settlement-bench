@@ -20,6 +20,7 @@ Outputs:
 - `eval/prompts.jsonl`
 - `eval/responses_template.jsonl`
 - `rubric/agentsettlement_rules.json`
+- `ai_benchmark/ground_truth.json` (canonical expected decisions)
 
 ## 2) Fixed Prompt Contract (All Models)
 
@@ -58,6 +59,8 @@ Outputs:
 - `eval/runs/<run_id>/results_scored.csv`
 - `eval/runs/<run_id>/results_summary.json`
 - `eval/runs/<run_id>/results_summary.md`
+
+Scoring compares model decisions against `ai_benchmark/ground_truth.json`.
 
 ## 5) Risk-Weighted Metric
 

@@ -31,6 +31,7 @@ Risk Weighted Fail: 39.9%
 ## Benchmark Data
 - `ai_benchmark/agentsettlement_benchmark.json`
 - `ai_benchmark/agentsettlement_benchmark_raw_v1.json`
+- `ai_benchmark/ground_truth.json`
 
 ## Rubric
 - `rubric/agentsettlement_rules.md`
@@ -50,6 +51,12 @@ Leaderboard-eligible results must come from raw model outputs scored via:
 - `score-model-responses.js`
 
 Baselines/manual/self-check runs are reference-only and are not leaderboard-eligible.
+
+## Objective Labels
+Canonical case decisions are stored in:
+- `ai_benchmark/ground_truth.json`
+
+Scoring and prompt-generation scripts enforce consistency between benchmark cases, rubric metadata, and ground-truth labels.
 
 ## Key Findings
 
