@@ -82,7 +82,11 @@ function resolvePaths() {
   const benchmarkRoot = path.resolve(__dirname, '../..');
   return {
     benchmarkRoot,
-    benchmarkPath: path.join(benchmarkRoot, 'agentsettlement_benchmark.json'),
+    benchmarkPath: path.join(
+      benchmarkRoot,
+      'ai_benchmark',
+      'agentsettlement_benchmark.json'
+    ),
     rubricPath: path.join(benchmarkRoot, 'rubric', 'agentsettlement_rules.md'),
     evalDir: path.join(benchmarkRoot, 'eval'),
   };

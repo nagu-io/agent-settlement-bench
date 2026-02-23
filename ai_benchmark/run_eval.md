@@ -11,15 +11,15 @@ Invalid pipeline:
 ## 1) Generate Standard Inputs
 
 ```powershell
-node ai_benchmark/scripts/export-benchmark-rubric-json.js
-node ai_benchmark/scripts/generate-benchmark-prompts.js
-node ai_benchmark/scripts/generate-response-template.js
+node scripts/export-benchmark-rubric-json.js
+node scripts/generate-benchmark-prompts.js
+node scripts/generate-response-template.js
 ```
 
 Outputs:
-- `ai_benchmark/eval/prompts.jsonl`
-- `ai_benchmark/eval/responses_template.jsonl`
-- `ai_benchmark/rubric/agentsettlement_rules.json`
+- `eval/prompts.jsonl`
+- `eval/responses_template.jsonl`
+- `rubric/agentsettlement_rules.json`
 
 ## 2) Fixed Prompt Contract (All Models)
 
@@ -41,7 +41,7 @@ PRIMARY_REASON: one short sentence
 Copy template and fill `model_output` from the model, case by case:
 
 ```powershell
-Copy-Item ai_benchmark/eval/responses_template.jsonl ai_benchmark/eval/responses.jsonl
+Copy-Item eval/responses_template.jsonl eval/responses.jsonl
 ```
 
 Each JSONL row must include:
@@ -51,13 +51,13 @@ Each JSONL row must include:
 ## 4) Score Raw Outputs (Leaderboard-Eligible)
 
 ```powershell
-node ai_benchmark/scripts/score-model-responses.js --input ai_benchmark/eval/responses.jsonl --outdir ai_benchmark/eval/runs/<run_id> --model <MODEL_NAME>
+node scripts/score-model-responses.js --input eval/responses.jsonl --outdir eval/runs/<run_id> --model <MODEL_NAME>
 ```
 
 Outputs:
-- `ai_benchmark/eval/runs/<run_id>/results_scored.csv`
-- `ai_benchmark/eval/runs/<run_id>/results_summary.json`
-- `ai_benchmark/eval/runs/<run_id>/results_summary.md`
+- `eval/runs/<run_id>/results_scored.csv`
+- `eval/runs/<run_id>/results_summary.json`
+- `eval/runs/<run_id>/results_summary.md`
 
 ## 5) Risk-Weighted Metric
 
@@ -76,16 +76,16 @@ risk_weighted_fail_rate = sum(weight x fail) / sum(weight)
 ## 6) Build Comparison Table
 
 ```powershell
-node ai_benchmark/scripts/build-model-comparison.js
+node scripts/build-model-comparison.js
 ```
 
 Generated:
-- `ai_benchmark/eval/model_comparison.md`
-- `ai_benchmark/eval/model_comparison.json`
+- `eval/model_comparison.md`
+- `eval/model_comparison.json`
 
 `build-model-comparison` places only `run_type=model_raw_output` and full coverage runs on the leaderboard.
 
 ## 7) Reference Runs
 
 Non-leaderboard runs (baselines, manual samples, self-checks) are tracked in:
-- `ai_benchmark/eval/runs/README.md`
+- `eval/runs/README.md`

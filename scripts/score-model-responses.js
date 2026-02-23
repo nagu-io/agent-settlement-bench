@@ -32,6 +32,10 @@ function parseArgs(argv) {
   };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
+    if (!arg.startsWith('-') && !args.input) {
+      args.input = arg;
+      continue;
+    }
     if (arg === '--input' && i + 1 < argv.length) {
       args.input = argv[i + 1];
       i += 1;

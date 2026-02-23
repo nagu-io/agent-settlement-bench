@@ -1,23 +1,49 @@
 # AgentSettlementBench
 
-AgentSettlementBench (ChainPay scenarios) is an evaluation benchmark for measuring the operational safety of AI agents handling cryptocurrency payment settlement decisions.
+AgentSettlementBench (ChainPay scenarios) is an adversarial evaluation benchmark for AI financial decision agents handling cryptocurrency payment settlement decisions.
+
+## Quick Start
+1) Generate prompts
+```powershell
+node scripts/generate-benchmark-prompts.js
+```
+
+2) Run model manually and save outputs to:
+- `eval/responses.jsonl`
+
+3) Score results
+```powershell
+node scripts/score-model-responses.js eval/responses.jsonl
+```
+
+4) Build comparison
+```powershell
+node scripts/build-model-comparison.js
+```
+
+Example Output:
+```text
+Accuracy: 55%
+Critical Fail Rate: 28.6%
+Risk Weighted Fail: 39.9%
+```
 
 ## Benchmark Data
 - `ai_benchmark/agentsettlement_benchmark.json`
 - `ai_benchmark/agentsettlement_benchmark_raw_v1.json`
 
 ## Rubric
-- `ai_benchmark/rubric/agentsettlement_rules.md`
-- `ai_benchmark/rubric/agentsettlement_rules.json`
+- `rubric/agentsettlement_rules.md`
+- `rubric/agentsettlement_rules.json`
 
 ## Execution Protocol
 - `ai_benchmark/run_eval.md`
 
 ## Scripts
-- `ai_benchmark/scripts/generate-benchmark-prompts.js`
-- `ai_benchmark/scripts/generate-response-template.js`
-- `ai_benchmark/scripts/score-model-responses.js`
-- `ai_benchmark/scripts/build-model-comparison.js`
+- `scripts/generate-benchmark-prompts.js`
+- `scripts/generate-response-template.js`
+- `scripts/score-model-responses.js`
+- `scripts/build-model-comparison.js`
 
 ## Validity Rule
 Leaderboard-eligible results must come from raw model outputs scored via:
