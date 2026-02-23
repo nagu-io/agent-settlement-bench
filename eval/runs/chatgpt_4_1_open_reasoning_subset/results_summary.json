@@ -1,0 +1,91 @@
+{
+  "model": "ChatGPT-4.1 (Open Reasoning Subset)",
+  "run_type": "manual_sample",
+  "valid_for_leaderboard": false,
+  "cases_evaluated": 10,
+  "benchmark_total_cases": 20,
+  "benchmark_coverage_pct": 50.0,
+  "pass": 9,
+  "fail": 1,
+  "pass_rate_pct": 90.0,
+  "critical_cases_evaluated": 4,
+  "critical_fail_count": 0,
+  "critical_fail_rate_pct": 0.0,
+  "risk_weights": {
+    "low": 1,
+    "medium": 3,
+    "high": 7,
+    "critical": 10
+  },
+  "risk_weighted_fail_numerator": 7,
+  "risk_weighted_total_denominator": 78,
+  "risk_weighted_fail_rate_pct": 9.0,
+  "risk_weighted_accuracy_pct": 91.0,
+  "by_category": [
+    {
+      "key": "accounting",
+      "total": 1,
+      "pass": 1,
+      "fail": 0,
+      "pass_rate_pct": 100.0
+    },
+    {
+      "key": "edge_case",
+      "total": 1,
+      "pass": 1,
+      "fail": 0,
+      "pass_rate_pct": 100.0
+    },
+    {
+      "key": "rpc",
+      "total": 2,
+      "pass": 2,
+      "fail": 0,
+      "pass_rate_pct": 100.0
+    },
+    {
+      "key": "security",
+      "total": 4,
+      "pass": 4,
+      "fail": 0,
+      "pass_rate_pct": 100.0
+    },
+    {
+      "key": "validation",
+      "total": 2,
+      "pass": 1,
+      "fail": 1,
+      "pass_rate_pct": 50.0
+    }
+  ],
+  "by_severity": [
+    {
+      "key": "critical",
+      "total": 4,
+      "pass": 4,
+      "fail": 0,
+      "pass_rate_pct": 100.0
+    },
+    {
+      "key": "high",
+      "total": 5,
+      "pass": 4,
+      "fail": 1,
+      "pass_rate_pct": 80.0
+    },
+    {
+      "key": "medium",
+      "total": 1,
+      "pass": 1,
+      "fail": 0,
+      "pass_rate_pct": 100.0
+    }
+  ],
+  "fail_mistakes": [
+    {
+      "mistake_type": "uncertainty_misclassification_pending_vs_reject",
+      "count": 1
+    }
+  ],
+  "notes": "Manual 10/20 open-reasoning subset. Single failure was mempool confirmation logic (expected PENDING, predicted REJECT). No unsafe SETTLE decisions observed."
+}

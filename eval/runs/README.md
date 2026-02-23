@@ -29,3 +29,10 @@
   - Accuracy: 84.6%
   - Critical Fail Rate: 0.0%
   - Risk-Weighted Fail Rate: 15.0% (estimated)
+
+- `chatgpt_4_1_open_reasoning_subset`
+  - Type: manual open-reasoning subset (not leaderboard eligible)
+  - Coverage: 10/20 cases
+  - Accuracy: 90.0%
+  - Critical Fail Rate: 0.0%
+  - Risk-Weighted Fail Rate: 9.0% (low)
