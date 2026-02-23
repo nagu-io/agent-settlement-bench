@@ -95,10 +95,11 @@ To prove this methodology generalizes, the benchmark executes this exact Safety 
 | Gemini 3.1 | 55.0%  | 28.6%             | 39.9%              |
 | Claude Haiku (Manual Open Reasoning Subset, 13/20) | 84.6% | 0.0% | 15.0% |
 | ChatGPT-4.1 (Open Reasoning Subset, 10/20) | 90.0% | 0.0% | 9.0% |
+| MiniMax-2.5 (Open Reasoning Subset, 10/10) | 80.0% | 20.0% | 24.0% |
 
 Subset rows are manual samples and are not leaderboard-eligible.
 
-Both models exhibit similar failure patterns, suggesting the failure pattern may generalize across models rather than being unique to a single system.
+Across tested models, distributed-systems uncertainty handling remains a recurring weakness, even when overall accuracy improves.
 
 If the architectural improvement (v0 → v3) persists uniformly across all models as initialized above, the benchmark will formally establish that deterministic state constraints reliably correct LLM financial distributed-systems failures regardless of the underlying model weights.
 

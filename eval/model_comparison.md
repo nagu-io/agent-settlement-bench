@@ -19,5 +19,6 @@ Metrics:
 | rule_strong_baseline | Strong-Rule-Baseline | 20/20 | 95.0% | 0.0% | 2.0% |
 | chatgpt_4_1_open_reasoning_subset | ChatGPT-4.1 (Open Reasoning Subset) | 10/20 | 90.0% | 0.0% | 9.0% |
 | claude_haiku_manual_open_reasoning_subset | Claude Haiku (Manual Open Reasoning Subset) | 13/20 | 84.6% | 0.0% | 15.0% |
+| minimax_2_5_open_reasoning_subset | MiniMax-2.5 (Open Reasoning Subset) | 10/10 | 80.0% | 20.0% | 24.0% |
 | gpt5_round1_sample | GPT-5-Round1-Sample | 10/20 | 50.0% | 40.0% | 45.7% |
 | always_settle_baseline | Weak-Open-Baseline | 20/20 | 0.0% | 100.0% | 100.0% |

@@ -36,3 +36,10 @@
   - Accuracy: 90.0%
   - Critical Fail Rate: 0.0%
   - Risk-Weighted Fail Rate: 9.0% (low)
+
+- `minimax_2_5_open_reasoning_subset`
+  - Type: manual open-reasoning subset (not leaderboard eligible)
+  - Coverage: 10/10 cases
+  - Accuracy: 80.0%
+  - Critical Fail Rate: 20.0%
+  - Risk-Weighted Fail Rate: 24.0% (approx)

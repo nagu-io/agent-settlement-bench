@@ -1,0 +1,5 @@
+{
+  "run_type": "manual_sample",
+  "valid_for_leaderboard": false,
+  "notes": "Manual open-reasoning subset from user-provided 10-case outputs."
+}

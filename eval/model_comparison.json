@@ -669,6 +669,34 @@
       "notes": "Manual open-reasoning subset from human-graded outputs (13/20)."
     },
     {
+      "run_id": "minimax_2_5_open_reasoning_subset",
+      "model": "MiniMax-2.5 (Open Reasoning Subset)",
+      "run_type": "manual_sample",
+      "valid_for_leaderboard": false,
+      "cases_evaluated": 10,
+      "benchmark_total_cases": 10,
+      "benchmark_coverage_pct": 100,
+      "pass": 8,
+      "fail": 2,
+      "pass_rate_pct": 80,
+      "critical_cases_evaluated": 10,
+      "critical_fail_count": 2,
+      "critical_fail_rate_pct": 20,
+      "risk_weighted_fail_rate_pct": 24,
+      "risk_weighted_accuracy_pct": 76,
+      "fail_mistakes": [
+        {
+          "mistake_type": "expiry_boundary_settle_instead_of_reject",
+          "count": 1
+        },
+        {
+          "mistake_type": "idempotency_collision_pending_instead_of_reject",
+          "count": 1
+        }
+      ],
+      "notes": "Manual open-reasoning subset from user-provided 10-case outputs."
+    },
+    {
       "run_id": "gpt5_round1_sample",
       "model": "GPT-5-Round1-Sample",
       "cases_evaluated": 10,

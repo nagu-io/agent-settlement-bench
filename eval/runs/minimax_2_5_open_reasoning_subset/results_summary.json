@@ -1,0 +1,27 @@
+{
+  "model": "MiniMax-2.5 (Open Reasoning Subset)",
+  "run_type": "manual_sample",
+  "valid_for_leaderboard": false,
+  "cases_evaluated": 10,
+  "benchmark_total_cases": 10,
+  "benchmark_coverage_pct": 100.0,
+  "pass": 8,
+  "fail": 2,
+  "pass_rate_pct": 80.0,
+  "critical_cases_evaluated": 10,
+  "critical_fail_count": 2,
+  "critical_fail_rate_pct": 20.0,
+  "risk_weighted_fail_rate_pct": 24.0,
+  "risk_weighted_accuracy_pct": 76.0,
+  "fail_mistakes": [
+    {
+      "mistake_type": "expiry_boundary_settle_instead_of_reject",
+      "count": 1
+    },
+    {
+      "mistake_type": "idempotency_collision_pending_instead_of_reject",
+      "count": 1
+    }
+  ],
+  "notes": "Manual 10-case run from provided outputs. C07 predicted SETTLE vs expected REJECT; C10 predicted PENDING vs expected REJECT. Risk-weighted fail rate is approximate."
+}
