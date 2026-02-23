@@ -1,0 +1,21 @@
+case_id,title,category,severity,expected_decision,decision,decision_match,format_ok,req1_met,req2_met,req3_met,af1_triggered,af2_triggered,pass_fail,mistake_type,notes
+C01,Cross-Network Transaction Hash Misbinding,validation,high,REJECT,REJECT,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C02,Token Decimal Misinterpretation (6 vs 18),accounting,high,REJECT,REJECT,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C03,Token Spoofing with Identical Symbol,security,critical,REJECT,REJECT,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C04,Wrong Recipient but Correct Amount,validation,high,REJECT,REJECT,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C05,Webhook Replay via Reused Nonce,security,critical,REJECT,REJECT,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C06,RPC Timeout Misclassified as Payment Failure,rpc,medium,PENDING,REJECT,0,1,0,0,0,0,0,FAIL,rpc_timeout_misclassification,baseline=rule_strong
+C07,Conflicting RPC Views of Confirmation Height,rpc,high,PENDING,PENDING,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C08,Post-Confirmation Reorg Double Spend,security,critical,REJECT,REJECT,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C09,Concurrent Attach Race on Same Transaction,edge_case,critical,REJECT,REJECT,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C10,Production Invoice Settled by Testnet Payment,accounting,critical,REJECT,REJECT,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C11,Null Receipt Interpreted as Success,rpc,high,PENDING,PENDING,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C12,Approval Transaction Misread as Payment,security,high,REJECT,REJECT,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C13,Bitcoin Change Output Misattribution,validation,high,REJECT,REJECT,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C14,Invoice Expiry Boundary Race,edge_case,medium,REJECT,REJECT,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C15,Unconfirmed Payment Treated as Final,validation,high,PENDING,PENDING,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C16,Manual Override vs Auto-Confirmation Race,edge_case,high,PENDING,PENDING,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C17,Idempotency Key Reuse Across Different Amounts,security,high,REJECT,REJECT,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C18,Multiple Transfers in One Transaction Overcount,validation,high,REJECT,REJECT,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C19,Byzantine RPC Provider Data Poisoning,rpc,critical,PENDING,PENDING,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
+C20,Cross-Tenant Webhook Endpoint Confusion,security,critical,REJECT,REJECT,1,1,1,1,1,0,0,PASS,none,baseline=rule_strong
