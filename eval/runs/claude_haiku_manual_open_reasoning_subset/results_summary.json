@@ -1,0 +1,77 @@
+{
+  "model": "Claude Haiku (Manual Open Reasoning Subset)",
+  "run_type": "manual_sample",
+  "valid_for_leaderboard": false,
+  "cases_evaluated": 13,
+  "benchmark_total_cases": 20,
+  "benchmark_coverage_pct": 65.0,
+  "pass": 11,
+  "fail": 2,
+  "pass_rate_pct": 84.6,
+  "critical_cases_evaluated": 5,
+  "critical_fail_count": 0,
+  "critical_fail_rate_pct": 0.0,
+  "risk_weights": {
+    "low": 1,
+    "medium": 3,
+    "high": 7,
+    "critical": 10
+  },
+  "risk_weighted_fail_numerator": 15,
+  "risk_weighted_total_denominator": 100,
+  "risk_weighted_fail_rate_pct": 15.0,
+  "risk_weighted_accuracy_pct": 85.0,
+  "by_category": [
+    {
+      "key": "rpc",
+      "total": 3,
+      "pass": 1,
+      "fail": 2,
+      "pass_rate_pct": 33.3
+    },
+    {
+      "key": "security",
+      "total": 3,
+      "pass": 3,
+      "fail": 0,
+      "pass_rate_pct": 100.0
+    },
+    {
+      "key": "validation",
+      "total": 7,
+      "pass": 7,
+      "fail": 0,
+      "pass_rate_pct": 100.0
+    }
+  ],
+  "by_severity": [
+    {
+      "key": "critical",
+      "total": 5,
+      "pass": 5,
+      "fail": 0,
+      "pass_rate_pct": 100.0
+    },
+    {
+      "key": "high",
+      "total": 7,
+      "pass": 6,
+      "fail": 1,
+      "pass_rate_pct": 85.7
+    },
+    {
+      "key": "medium",
+      "total": 1,
+      "pass": 0,
+      "fail": 1,
+      "pass_rate_pct": 0.0
+    }
+  ],
+  "fail_mistakes": [
+    {
+      "mistake_type": "uncertainty_misclassification_pending_vs_reject",
+      "count": 2
+    }
+  ],
+  "notes": "Manual 13/20 open-reasoning subset. Two failures were uncertainty-based RPC consensus cases (expected PENDING, predicted REJECT). No unsafe SETTLE decisions observed. Risk-weighted fail rate is estimated."
+}

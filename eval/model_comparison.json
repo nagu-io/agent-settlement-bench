@@ -85,6 +85,232 @@
         }
       ],
       "fail_mistakes": []
+    },
+    {
+      "run_id": "antigravity_tool_verification_run",
+      "model": "Antigravity_Tool_Verification",
+      "run_type": "model_raw_output",
+      "valid_for_leaderboard": true,
+      "cases_evaluated": 20,
+      "benchmark_total_cases": 20,
+      "benchmark_coverage_pct": 100,
+      "pass": 16,
+      "fail": 4,
+      "pass_rate_pct": 80,
+      "critical_cases_evaluated": 7,
+      "critical_fail_count": 1,
+      "critical_fail_rate_pct": 14.3,
+      "risk_weights": {
+        "low": 1,
+        "medium": 3,
+        "high": 7,
+        "critical": 10
+      },
+      "risk_weighted_fail_numerator": 27,
+      "risk_weighted_total_denominator": 153,
+      "risk_weighted_fail_rate_pct": 17.6,
+      "risk_weighted_accuracy_pct": 82.4,
+      "by_category": [
+        {
+          "key": "accounting",
+          "total": 2,
+          "pass": 2,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "edge_case",
+          "total": 3,
+          "pass": 1,
+          "fail": 2,
+          "pass_rate_pct": 33.3
+        },
+        {
+          "key": "rpc",
+          "total": 4,
+          "pass": 4,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "security",
+          "total": 6,
+          "pass": 6,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "validation",
+          "total": 5,
+          "pass": 3,
+          "fail": 2,
+          "pass_rate_pct": 60
+        }
+      ],
+      "by_severity": [
+        {
+          "key": "critical",
+          "total": 7,
+          "pass": 6,
+          "fail": 1,
+          "pass_rate_pct": 85.7
+        },
+        {
+          "key": "high",
+          "total": 11,
+          "pass": 9,
+          "fail": 2,
+          "pass_rate_pct": 81.8
+        },
+        {
+          "key": "medium",
+          "total": 2,
+          "pass": 1,
+          "fail": 1,
+          "pass_rate_pct": 50
+        }
+      ],
+      "fail_mistakes": [
+        {
+          "mistake_type": "race_double_credit",
+          "count": 1
+        },
+        {
+          "mistake_type": "utxo_output_misattribution",
+          "count": 1
+        },
+        {
+          "mistake_type": "expiry_policy_violation",
+          "count": 1
+        },
+        {
+          "mistake_type": "transfer_event_overcount",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "run_id": "antigravity_reasoning_run",
+      "model": "Antigravity_Reasoning",
+      "run_type": "model_raw_output",
+      "valid_for_leaderboard": true,
+      "cases_evaluated": 20,
+      "benchmark_total_cases": 20,
+      "benchmark_coverage_pct": 100,
+      "pass": 11,
+      "fail": 9,
+      "pass_rate_pct": 55,
+      "critical_cases_evaluated": 7,
+      "critical_fail_count": 2,
+      "critical_fail_rate_pct": 28.6,
+      "risk_weights": {
+        "low": 1,
+        "medium": 3,
+        "high": 7,
+        "critical": 10
+      },
+      "risk_weighted_fail_numerator": 61,
+      "risk_weighted_total_denominator": 153,
+      "risk_weighted_fail_rate_pct": 39.9,
+      "risk_weighted_accuracy_pct": 60.1,
+      "by_category": [
+        {
+          "key": "accounting",
+          "total": 2,
+          "pass": 2,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "edge_case",
+          "total": 3,
+          "pass": 0,
+          "fail": 3,
+          "pass_rate_pct": 0
+        },
+        {
+          "key": "rpc",
+          "total": 4,
+          "pass": 0,
+          "fail": 4,
+          "pass_rate_pct": 0
+        },
+        {
+          "key": "security",
+          "total": 6,
+          "pass": 6,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "validation",
+          "total": 5,
+          "pass": 3,
+          "fail": 2,
+          "pass_rate_pct": 60
+        }
+      ],
+      "by_severity": [
+        {
+          "key": "critical",
+          "total": 7,
+          "pass": 5,
+          "fail": 2,
+          "pass_rate_pct": 71.4
+        },
+        {
+          "key": "high",
+          "total": 11,
+          "pass": 6,
+          "fail": 5,
+          "pass_rate_pct": 54.5
+        },
+        {
+          "key": "medium",
+          "total": 2,
+          "pass": 0,
+          "fail": 2,
+          "pass_rate_pct": 0
+        }
+      ],
+      "fail_mistakes": [
+        {
+          "mistake_type": "rpc_timeout_misclassification",
+          "count": 1
+        },
+        {
+          "mistake_type": "weak_rpc_consensus",
+          "count": 1
+        },
+        {
+          "mistake_type": "race_double_credit",
+          "count": 1
+        },
+        {
+          "mistake_type": "incomplete_chain_evidence",
+          "count": 1
+        },
+        {
+          "mistake_type": "utxo_output_misattribution",
+          "count": 1
+        },
+        {
+          "mistake_type": "expiry_policy_violation",
+          "count": 1
+        },
+        {
+          "mistake_type": "state_transition_race",
+          "count": 1
+        },
+        {
+          "mistake_type": "transfer_event_overcount",
+          "count": 1
+        },
+        {
+          "mistake_type": "single_source_trust",
+          "count": 1
+        }
+      ]
     }
   ],
   "reference": [
@@ -271,6 +497,84 @@
       "run_type": "synthetic_baseline",
       "valid_for_leaderboard": false,
       "notes": "Deterministic policy baseline, not model output."
+    },
+    {
+      "run_id": "claude_haiku_manual_open_reasoning_subset",
+      "model": "Claude Haiku (Manual Open Reasoning Subset)",
+      "run_type": "manual_sample",
+      "valid_for_leaderboard": false,
+      "cases_evaluated": 13,
+      "benchmark_total_cases": 20,
+      "benchmark_coverage_pct": 65,
+      "pass": 11,
+      "fail": 2,
+      "pass_rate_pct": 84.6,
+      "critical_cases_evaluated": 5,
+      "critical_fail_count": 0,
+      "critical_fail_rate_pct": 0,
+      "risk_weights": {
+        "low": 1,
+        "medium": 3,
+        "high": 7,
+        "critical": 10
+      },
+      "risk_weighted_fail_numerator": 15,
+      "risk_weighted_total_denominator": 100,
+      "risk_weighted_fail_rate_pct": 15,
+      "risk_weighted_accuracy_pct": 85,
+      "by_category": [
+        {
+          "key": "rpc",
+          "total": 3,
+          "pass": 1,
+          "fail": 2,
+          "pass_rate_pct": 33.3
+        },
+        {
+          "key": "security",
+          "total": 3,
+          "pass": 3,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "validation",
+          "total": 7,
+          "pass": 7,
+          "fail": 0,
+          "pass_rate_pct": 100
+        }
+      ],
+      "by_severity": [
+        {
+          "key": "critical",
+          "total": 5,
+          "pass": 5,
+          "fail": 0,
+          "pass_rate_pct": 100
+        },
+        {
+          "key": "high",
+          "total": 7,
+          "pass": 6,
+          "fail": 1,
+          "pass_rate_pct": 85.7
+        },
+        {
+          "key": "medium",
+          "total": 1,
+          "pass": 0,
+          "fail": 1,
+          "pass_rate_pct": 0
+        }
+      ],
+      "fail_mistakes": [
+        {
+          "mistake_type": "uncertainty_misclassification_pending_vs_reject",
+          "count": 2
+        }
+      ],
+      "notes": "Manual open-reasoning subset from human-graded outputs (13/20)."
     },
     {
       "run_id": "gpt5_round1_sample",

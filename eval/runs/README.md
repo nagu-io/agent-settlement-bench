@@ -22,3 +22,10 @@
 - `gpt5_live_manual_prompt`
   - Type: live assistant-generated model output run (not leaderboard eligible)
   - Coverage: 20/20 cases
+
+- `claude_haiku_manual_open_reasoning_subset`
+  - Type: manual open-reasoning subset (not leaderboard eligible)
+  - Coverage: 13/20 cases
+  - Accuracy: 84.6%
+  - Critical Fail Rate: 0.0%
+  - Risk-Weighted Fail Rate: 15.0% (estimated)
