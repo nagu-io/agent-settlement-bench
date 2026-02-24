@@ -1,5 +1,12 @@
 # Run Registry
 
+- Manual run schema: `eval/runs/manual_run_schema.json`
+- Manual decision template: `eval/runs/manual_decisions_template.json`
+- Compute manual subset metrics from case decisions:
+  - `node scripts/score-manual-decisions.js --input <decisions.json|csv> --outdir eval/runs/<run_id> --model "<MODEL_NAME>" --source "<SOURCE_DESC>"`
+- Validate manual run metadata/consistency:
+  - `node scripts/validate-manual-runs.js`
+
 - `gpt5_round1_sample`
   - Type: manual sample (not leaderboard eligible)
   - Coverage: 10/20 cases
@@ -39,7 +46,7 @@
 
 - `minimax_2_5_open_reasoning_subset`
   - Type: manual open-reasoning subset (not leaderboard eligible)
-  - Coverage: 10/10 cases
+  - Coverage: 10/20 cases
   - Accuracy: 80.0%
   - Critical Fail Rate: 20.0%
   - Risk-Weighted Fail Rate: 24.0% (approx)

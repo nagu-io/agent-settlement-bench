@@ -1,0 +1,12 @@
+[
+  {
+    "case_id": "C01",
+    "decision": "REJECT",
+    "notes": "Short rationale for the decision."
+  },
+  {
+    "case_id": "C06",
+    "decision": "PENDING",
+    "notes": "Timeout/uncertainty should remain pending."
+  }
+]

@@ -1,1 +1,11 @@
-{"run_type":"manual_sample","valid_for_leaderboard":false,"notes":"Manual sampled evaluation (10/20), not full raw-output run."}
+{
+  "schema_version": 1,
+  "run_type": "manual_sample",
+  "valid_for_leaderboard": false,
+  "coverage_basis": "manual_case_subset",
+  "source": "eval/runs/gpt5_round1_sample/judgments.csv",
+  "date": "2026-02-23",
+  "is_estimated": false,
+  "decisions_file": "judgments.csv",
+  "notes": "Manual sampled evaluation (10/20), not full raw-output run."
+}

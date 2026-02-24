@@ -92,3 +92,22 @@ Generated:
 
 Non-leaderboard runs (baselines, manual samples, self-checks) are tracked in:
 - `eval/runs/README.md`
+
+## 8) Manual Subset Scoring (Computed, Non-Estimated)
+
+Prepare a decision file (`JSON` or `CSV`) with at least:
+- `case_id`
+- `decision` (`SETTLE|REJECT|PENDING`)
+- `notes` (optional)
+
+Example:
+
+```powershell
+node scripts/score-manual-decisions.js --input eval/runs/manual_decisions_template.json --outdir eval/runs/<run_id> --model "<MODEL_NAME>" --source "<SOURCE_DESC>"
+```
+
+Validate manual run metadata and coverage consistency:
+
+```powershell
+node scripts/validate-manual-runs.js
+```

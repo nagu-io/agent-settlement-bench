@@ -1,5 +1,10 @@
 {
+  "schema_version": 1,
   "run_type": "manual_sample",
   "valid_for_leaderboard": false,
+  "coverage_basis": "manual_subset_without_case_ids",
+  "source": "manual_transcript_summary",
+  "date": "2026-02-24",
+  "is_estimated": true,
   "notes": "Manual open-reasoning subset from user-provided 10-case outputs."
 }

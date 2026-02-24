@@ -44,6 +44,8 @@ Risk Weighted Fail: 39.9%
 - `scripts/generate-benchmark-prompts.js`
 - `scripts/generate-response-template.js`
 - `scripts/score-model-responses.js`
+- `scripts/score-manual-decisions.js`
+- `scripts/validate-manual-runs.js`
 - `scripts/build-model-comparison.js`
 
 ## Validity Rule
@@ -95,9 +97,10 @@ To prove this methodology generalizes, the benchmark executes this exact Safety 
 | Gemini 3.1 | 55.0%  | 28.6%             | 39.9%              |
 | Claude Haiku (Manual Open Reasoning Subset, 13/20) | 84.6% | 0.0% | 15.0% |
 | ChatGPT-4.1 (Open Reasoning Subset, 10/20) | 90.0% | 0.0% | 9.0% |
-| MiniMax-2.5 (Open Reasoning Subset, 10/10) | 80.0% | 20.0% | 24.0% |
+| MiniMax-2.5 (Open Reasoning Subset, 10/20) | 80.0% | 20.0% | 24.0% |
 
 Subset rows are manual samples and are not leaderboard-eligible.
+Subset coverage is standardized against the full 20-case benchmark.
 
 Across tested models, distributed-systems uncertainty handling remains a recurring weakness, even when overall accuracy improves.
 

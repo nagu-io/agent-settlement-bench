@@ -588,7 +588,12 @@
           "count": 1
         }
       ],
-      "notes": "Manual open-reasoning subset from human-graded outputs (10/20)."
+      "notes": "Manual open-reasoning subset from human-graded outputs (10/20).",
+      "schema_version": 1,
+      "coverage_basis": "manual_named_subset",
+      "source": "manual_transcript_summary",
+      "date": "2026-02-24",
+      "is_estimated": true
     },
     {
       "run_id": "claude_haiku_manual_open_reasoning_subset",
@@ -666,7 +671,12 @@
           "count": 2
         }
       ],
-      "notes": "Manual open-reasoning subset from human-graded outputs (13/20)."
+      "notes": "Manual open-reasoning subset from human-graded outputs (13/20).",
+      "schema_version": 1,
+      "coverage_basis": "manual_named_subset",
+      "source": "manual_transcript_summary",
+      "date": "2026-02-24",
+      "is_estimated": true
     },
     {
       "run_id": "minimax_2_5_open_reasoning_subset",
@@ -674,8 +684,8 @@
       "run_type": "manual_sample",
       "valid_for_leaderboard": false,
       "cases_evaluated": 10,
-      "benchmark_total_cases": 10,
-      "benchmark_coverage_pct": 100,
+      "benchmark_total_cases": 20,
+      "benchmark_coverage_pct": 50,
       "pass": 8,
       "fail": 2,
       "pass_rate_pct": 80,
@@ -694,7 +704,12 @@
           "count": 1
         }
       ],
-      "notes": "Manual open-reasoning subset from user-provided 10-case outputs."
+      "notes": "Manual open-reasoning subset from user-provided 10-case outputs.",
+      "schema_version": 1,
+      "coverage_basis": "manual_subset_without_case_ids",
+      "source": "manual_transcript_summary",
+      "date": "2026-02-24",
+      "is_estimated": true
     },
     {
       "run_id": "gpt5_round1_sample",
@@ -793,8 +808,14 @@
           "count": 1
         }
       ],
+      "schema_version": 1,
       "run_type": "manual_sample",
       "valid_for_leaderboard": false,
+      "coverage_basis": "manual_case_subset",
+      "source": "eval/runs/gpt5_round1_sample/judgments.csv",
+      "date": "2026-02-23",
+      "is_estimated": false,
+      "decisions_file": "judgments.csv",
       "notes": "Manual sampled evaluation (10/20), not full raw-output run."
     },
     {

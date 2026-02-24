@@ -1,6 +1,9 @@
 const fs = require('fs');
 const path = require('path');
-const { resolvePaths } = require('./lib/agentsettlementRubric');
+const {
+  loadBenchmarkCases,
+  resolvePaths,
+} = require('./lib/agentsettlementRubric');
 
 function discoverRuns(runsDir) {
   if (!fs.existsSync(runsDir)) return [];
@@ -62,14 +65,36 @@ function isLeaderboardRun(run) {
   );
 }
 
+function validateRunConsistency(runs, benchmarkTotalCases) {
+  for (const run of runs) {
+    if (run.run_type === 'manual_sample') {
+      if (run.benchmark_total_cases !== benchmarkTotalCases) {
+        throw new Error(
+          `manual_sample "${run.run_id}" must use benchmark_total_cases=${benchmarkTotalCases}`
+        );
+      }
+      const expectedCoverage = Number(
+        ((run.cases_evaluated / benchmarkTotalCases) * 100).toFixed(1)
+      );
+      if (Math.abs(run.benchmark_coverage_pct - expectedCoverage) > 0.1) {
+        throw new Error(
+          `manual_sample "${run.run_id}" has invalid benchmark_coverage_pct (expected ${expectedCoverage}, found ${run.benchmark_coverage_pct})`
+        );
+      }
+    }
+  }
+}
+
 function main() {
-  const { benchmarkRoot } = resolvePaths();
+  const { benchmarkPath, benchmarkRoot } = resolvePaths();
+  const benchmarkTotalCases = loadBenchmarkCases(benchmarkPath).length;
   const evalDir = path.join(benchmarkRoot, 'eval');
   const runsDir = path.join(evalDir, 'runs');
   const runs = discoverRuns(runsDir);
   if (runs.length === 0) {
     throw new Error(`No run summaries found under ${runsDir}`);
   }
+  validateRunConsistency(runs, benchmarkTotalCases);
 
   const leaderboard = sortRows(runs.filter((run) => isLeaderboardRun(run)));
   const reference = sortRows(runs.filter((run) => !isLeaderboardRun(run)));
