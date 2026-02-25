@@ -1,5 +1,12 @@
 # AgentSettlementBench
 
+Safety benchmark for AI agents making irreversible financial decisions.
+
+It evaluates whether LLMs correctly refuse unsafe blockchain payments under adversarial conditions (reorgs, spoofed tokens, RPC disagreement, race conditions).
+
+![Status](https://img.shields.io/badge/benchmark-active-brightgreen)
+![Domain](https://img.shields.io/badge/domain-AI%20Safety-blue)
+
 ## Run in 60 seconds
 
 ```powershell
@@ -22,19 +29,34 @@ Notes:
 - `--api-model` chooses provider model id (defaults are built in)
 - `--key` can be omitted if `.env` has `OPENAI_API_KEY` or `GEMINI_API_KEY`
 
-![Status](https://img.shields.io/badge/benchmark-active-brightgreen)
-![Domain](https://img.shields.io/badge/domain-AI%20Safety-blue)
+## Public Leaderboard
 
-AgentSettlementBench is a safety benchmark for AI agents making irreversible financial decisions.
+| Model | Accuracy | Critical Fail Rate | Risk-Weighted Fail |
+|:---|---:|---:|---:|
+| Codex | 50.0% | 30.0% | 40.0% |
+| Gemini 3.1 | 55.0% | 28.6% | 39.9% |
+| Claude Haiku (subset 13/20) | 84.6% | 0.0% | 15.0% |
+| ChatGPT-4.1 (subset 10/20) | 90.0% | 0.0% | 9.0% |
+| MiniMax-2.5 (subset 10/20) | 80.0% | 20.0% | 24.0% |
 
-It evaluates whether LLMs correctly refuse unsafe blockchain payments under adversarial conditions (reorgs, spoofed tokens, RPC disagreement, race conditions).
+Subset rows are reference-only and not leaderboard-eligible.
 
-### Result Snapshot
-| Version | Architecture | Accuracy | Critical Fail Rate | Risk-Weighted Fail |
-|:---|:---|:---|:---|:---|
-| **v0** | Open Reasoning (Raw LLM) | 55.0% | 28.6% | 39.9% |
-| **v1** | Strict Prompt Policy | 100% | 0.0% | 0.0% |
-| **v3** | Tool Verification (State Machine) | 80.0% | 14.3% | 17.6% |
+## Evaluation Modes
+
+| Mode | Description |
+|---|---|
+| v0 | Open reasoning (raw LLM) |
+| v1 | Strict policy prompt |
+| v3 | Tool-verified / state machine bounded |
+
+## Small Models Welcome
+
+This benchmark intentionally supports:
+- Local LLaMA / Qwen / Mistral
+- Quantized models
+- Ensemble voting setups
+
+Reliability is architecture-dependent, not size-dependent.
 
 ### Repo Purpose
 - Evaluate AI agent settlement safety under adversarial crypto payment scenarios.

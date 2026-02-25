@@ -533,7 +533,7 @@ async function main() {
   process.stdout.write('\n');
   process.stdout.write(`Accuracy: ${Number(summary.pass_rate_pct).toFixed(1)}%\n`);
   process.stdout.write(
-    `Critical Fail: ${Number(summary.critical_fail_rate_pct).toFixed(1)}%\n`
+    `Critical Fail Rate: ${Number(summary.critical_fail_rate_pct).toFixed(1)}%\n`
   );
   process.stdout.write(
     `Risk-Weighted Fail: ${Number(summary.risk_weighted_fail_rate_pct).toFixed(1)}%\n`
