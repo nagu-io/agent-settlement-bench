@@ -6,6 +6,7 @@ AgentSettlementBench is the first benchmark that tests whether AI agents safely 
 
 ![Status](https://img.shields.io/badge/benchmark-active-brightgreen)
 ![Domain](https://img.shields.io/badge/domain-AI%20Safety-blue)
+[![Smoke](https://github.com/nagu-io/agent-settlement-bench/actions/workflows/smoke.yml/badge.svg)](https://github.com/nagu-io/agent-settlement-bench/actions/workflows/smoke.yml)
 
 ## Result Snapshot (Public Leaderboard)
 
@@ -312,6 +313,12 @@ Investigate whether benchmark failures can automatically generate new control ru
 ### 5. Formal Safety Guarantees
 Explore combining LLM reasoning with verifiable checks (deterministic state machines or formal constraints) to move from empirical reliability toward provable safety bounds for financial agents.
 
+## Project Policies
+
+- [SECURITY.md](SECURITY.md)
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+
 ## Maintainer Notes
 
 Visibility operations (topics, discussions, release, starter issue): `docs/github-visibility.md`
+Canonical v1.0 release notes source: `docs/releases/v1.0.md`
