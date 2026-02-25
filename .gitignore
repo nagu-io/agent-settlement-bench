@@ -17,3 +17,7 @@
 /eval/tmp_no_majority.jsonl
 /eval/tmp_no_majority_out/
 /eval/tmp_smoke_ensemble/
+/eval/tmp_ci_*/
+
+# Timestamped local benchmark runs from npm run benchmark
+/eval/runs/*_20??????_??????/

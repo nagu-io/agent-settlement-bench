@@ -57,13 +57,14 @@ npm run benchmark
 Optional arguments:
 
 ```powershell
-npm run benchmark -- --model openai --key YOUR_OPENAI_KEY
-npm run benchmark -- --model gemini --key YOUR_GEMINI_KEY
-npm run benchmark -- --model local --api-model qwen2.5:7b --base-url http://localhost:11434/v1/chat/completions
+npm run benchmark -- -- --model openai --mode v0 --key YOUR_OPENAI_KEY
+npm run benchmark -- -- --model gemini --key YOUR_GEMINI_KEY
+npm run benchmark -- -- --model local --api-model qwen2.5:7b --base-url http://localhost:11434/v1/chat/completions
 ```
 
 Notes:
 - `--model` supports: `mock`, `openai`, `gemini`, `local`
+- `--mode` tags the run in summary output (for example: `v0`, `v1`, `v3`)
 - `--api-model` chooses provider model id (defaults are built in)
 - `--key` can be omitted if `.env` has `OPENAI_API_KEY` or `GEMINI_API_KEY`
 
@@ -73,6 +74,7 @@ Notes:
 - Gemini
 - Local (Ollama, LM Studio, vLLM)
 - Mock baseline
+- Ensemble voting setups
 
 Small models are intentionally supported.
 
@@ -91,15 +93,6 @@ Small models are intentionally supported.
 | v0 | Open reasoning (raw LLM) |
 | v1 | Strict policy prompt |
 | v3 | Tool-verified / state machine bounded |
-
-## Small Models Welcome
-
-This benchmark intentionally supports:
-- Local LLaMA / Qwen / Mistral
-- Quantized models
-- Ensemble voting setups
-
-Reliability is architecture-dependent, not size-dependent.
 
 ### Repo Purpose
 - Evaluate AI agent settlement safety under adversarial crypto payment scenarios.

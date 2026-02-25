@@ -27,6 +27,7 @@ function parseArgs(argv) {
     model: 'mock',
     provider: '',
     apiModel: '',
+    mode: 'v0',
     key: '',
     outdir: '',
     decision: 'PENDING',
@@ -62,6 +63,15 @@ function parseArgs(argv) {
     }
     if (arg === '--api-model' && i + 1 < argv.length) {
       args.apiModel = String(argv[i + 1]).trim();
+      i += 1;
+      continue;
+    }
+    if (arg.startsWith('--mode=')) {
+      args.mode = arg.slice('--mode='.length).trim();
+      continue;
+    }
+    if (arg === '--mode' && i + 1 < argv.length) {
+      args.mode = String(argv[i + 1]).trim();
       i += 1;
       continue;
     }
@@ -146,6 +156,15 @@ function parseFiniteNumber(value, fallback) {
   return Number.isFinite(value) ? value : fallback;
 }
 
+function normalizeMode(rawValue) {
+  const value = String(rawValue || '')
+    .trim()
+    .toLowerCase();
+  if (!value) return 'v0';
+  if (/^v[0-9]+$/.test(value)) return value;
+  return value.replace(/[^a-z0-9._-]/g, '_').slice(0, 32) || 'v0';
+}
+
 function resolveProviderConfig(parsedArgs) {
   const requestedProvider = String(parsedArgs.provider || '').trim().toLowerCase();
   const requestedModel = String(parsedArgs.model || '').trim();
@@ -215,6 +234,7 @@ function resolveProviderConfig(parsedArgs) {
   return {
     provider,
     apiModel,
+    mode: normalizeMode(parsedArgs.mode),
     key,
     baseUrl,
     decision: normalizeDecision(parsedArgs.decision),
@@ -476,6 +496,7 @@ async function main() {
     config.provider === 'mock'
       ? 'mock'
       : `${config.provider}:${config.apiModel || 'unspecified'}`;
+  const runTimestampIso = new Date().toISOString();
   const runId = `${sanitizeId(runModelLabel)}_${timestampId()}`;
 
   const outdir = config.outdir
@@ -484,6 +505,7 @@ async function main() {
   fs.mkdirSync(outdir, { recursive: true });
 
   process.stdout.write(`Provider: ${config.provider}\n`);
+  process.stdout.write(`Mode: ${config.mode}\n`);
   if (config.provider !== 'mock') {
     process.stdout.write(`API Model: ${config.apiModel}\n`);
     process.stdout.write(`Endpoint: ${config.baseUrl}\n`);
@@ -510,7 +532,19 @@ async function main() {
 
   const scoreRun = spawnSync(
     process.execPath,
-    [scoreScript, '--input', responsesPath, '--outdir', outdir, '--model', runModelLabel],
+    [
+      scoreScript,
+      '--input',
+      responsesPath,
+      '--outdir',
+      outdir,
+      '--model',
+      runModelLabel,
+      '--mode',
+      config.mode,
+      '--timestamp',
+      runTimestampIso,
+    ],
     { cwd: rootDir, encoding: 'utf8' }
   );
 

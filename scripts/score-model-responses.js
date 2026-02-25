@@ -31,6 +31,8 @@ function parseArgs(argv) {
     input: null,
     outdir: null,
     model: null,
+    mode: null,
+    timestamp: null,
     allowPartial: false,
   };
   for (let i = 0; i < argv.length; i += 1) {
@@ -51,6 +53,24 @@ function parseArgs(argv) {
     }
     if (arg === '--model' && i + 1 < argv.length) {
       args.model = argv[i + 1];
+      i += 1;
+      continue;
+    }
+    if (arg.startsWith('--mode=')) {
+      args.mode = arg.slice('--mode='.length);
+      continue;
+    }
+    if (arg === '--mode' && i + 1 < argv.length) {
+      args.mode = argv[i + 1];
+      i += 1;
+      continue;
+    }
+    if (arg.startsWith('--timestamp=')) {
+      args.timestamp = arg.slice('--timestamp='.length);
+      continue;
+    }
+    if (arg === '--timestamp' && i + 1 < argv.length) {
+      args.timestamp = argv[i + 1];
       i += 1;
       continue;
     }
@@ -173,7 +193,13 @@ function percentValue(part, total) {
   return Number(((part / total) * 100).toFixed(1));
 }
 
-function buildSummary(scoredRows, benchmarkTotalCases, modelName) {
+function buildSummary(
+  scoredRows,
+  benchmarkTotalCases,
+  modelName,
+  runMode,
+  runTimestamp
+) {
   const total = scoredRows.length;
   const passCount = scoredRows.filter((item) => item.pass_fail === 'PASS').length;
   const failCount = total - passCount;
@@ -238,6 +264,8 @@ function buildSummary(scoredRows, benchmarkTotalCases, modelName) {
 
   return {
     model: modelName || 'unspecified',
+    mode: runMode || 'unspecified',
+    timestamp: runTimestamp || new Date().toISOString(),
     run_type: 'model_raw_output',
     valid_for_leaderboard: true,
     cases_evaluated: total,
@@ -265,6 +293,8 @@ function summaryToMarkdown(summary) {
   lines.push('# AgentSettlementBench (ChainPay scenarios) Model Run Summary');
   lines.push('');
   lines.push(`- Model: ${summary.model}`);
+  lines.push(`- Mode: ${summary.mode}`);
+  lines.push(`- Timestamp (UTC): ${summary.timestamp}`);
   lines.push(
     `- Coverage: ${summary.cases_evaluated}/${summary.benchmark_total_cases} (${summary.benchmark_coverage_pct.toFixed(
       1
@@ -415,7 +445,15 @@ function main() {
 
   const modelName =
     args.model || path.basename(path.resolve(outputDir)) || 'unspecified';
-  const summary = buildSummary(scored, benchmarkCases.length, modelName);
+  const runMode = (args.mode || 'unspecified').trim() || 'unspecified';
+  const runTimestamp = (args.timestamp || '').trim() || new Date().toISOString();
+  const summary = buildSummary(
+    scored,
+    benchmarkCases.length,
+    modelName,
+    runMode,
+    runTimestamp
+  );
   fs.writeFileSync(outSummaryJson, `${JSON.stringify(summary, null, 2)}\n`, 'utf8');
   fs.writeFileSync(outSummaryMd, `${summaryToMarkdown(summary)}\n`, 'utf8');
 
