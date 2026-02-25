@@ -1,6 +1,25 @@
 # AgentSettlementBench
 
-AgentSettlementBench (ChainPay scenarios) is an adversarial evaluation benchmark for AI financial decision agents handling cryptocurrency payment settlement decisions.
+![Status](https://img.shields.io/badge/benchmark-active-brightgreen)
+![Domain](https://img.shields.io/badge/domain-AI%20Safety-blue)
+
+AgentSettlementBench is a safety benchmark for AI agents making irreversible financial decisions.
+
+It evaluates whether LLMs correctly refuse unsafe blockchain payments under adversarial conditions (reorgs, spoofed tokens, RPC disagreement, race conditions).
+
+### Result Snapshot
+| Version | Architecture | Accuracy | Critical Fail Rate | Risk-Weighted Fail |
+|:---|:---|:---|:---|:---|
+| **v0** | Open Reasoning (Raw LLM) | 55.0% | 28.6% | 39.9% |
+| **v1** | Strict Prompt Policy | 100% | 0.0% | 0.0% |
+| **v3** | Tool Verification (State Machine) | 80.0% | 14.3% | 17.6% |
+
+### Repo Purpose
+- Evaluate AI agent settlement safety under adversarial crypto payment scenarios.
+- Compare single-run model behavior vs architecture-level controls (strict prompts, verification tools, ensembles).
+- Provide reproducible scoring and model comparison artifacts.
+
+Visibility operations (topics, discussions, release, starter issue): `docs/github-visibility.md`
 
 ## Quick Start
 1) Generate prompts
