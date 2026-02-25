@@ -28,6 +28,57 @@ Critical Fail Rate: 28.6%
 Risk Weighted Fail: 39.9%
 ```
 
+### Ensemble Evaluation Mode (K=7 Strict Majority Vote)
+To evaluate whether repeated sampling improves system reliability:
+1) Generate `K` responses per case and save to `eval/responses_ensemble.jsonl`.
+2) Score the ensemble run with explicit `K`:
+```powershell
+node scripts/score-ensemble-responses.js --input eval/responses_ensemble.jsonl --k 7
+```
+3) Review outputs:
+- `eval/ensemble_scored.csv`
+- `eval/ensemble_summary.json`
+- `eval/ensemble_summary.md`
+
+Scoring rules:
+- Each case must have exactly `K` responses.
+- Decision uses **strict majority** (threshold = `floor(K/2)+1`), not plurality.
+- If no strict majority exists, decision is marked `NO_MAJORITY` and scored as fail (`ensemble_no_majority`).
+- The report includes both **Single Model Accuracy** (all raw responses) and **Ensemble Majority Accuracy** (case-level strict vote).
+
+Ensemble runs are reference-only and not leaderboard-eligible.
+
+### Ensemble K Sweep (Reliability vs Cost Curve)
+To compare multiple ensemble sizes in one run (for example `K=1,3,5,7`):
+```powershell
+node scripts/run-ensemble-k-sweep.js --input eval/responses_ensemble.jsonl --k-values 1,3,5,7 --cost-per-call-usd 0.002 --latency-per-call-ms 850
+```
+
+For research-grade stability, average each `K` across random subset trials:
+```powershell
+node scripts/run-ensemble-k-sweep.js --input eval/responses_ensemble.jsonl --k-values 1,3,5,7 --bootstrap-runs 30 --random-seed 42 --cost-per-call-usd 0.002 --latency-per-call-ms 850
+```
+
+Outputs:
+- `eval/ensemble_k_sweep/ensemble_k_sweep.md`
+- `eval/ensemble_k_sweep/ensemble_k_sweep.json`
+- `eval/ensemble_k_sweep/ensemble_k_sweep.csv`
+- per-K subfolders: `eval/ensemble_k_sweep/k1`, `k3`, `k5`, `k7`
+
+The sweep report includes:
+- accuracy and risk-weighted fail rate per `K`
+- standard deviation across bootstrap trials (`mean +/- sd`)
+- percentile interval bands (`p5/p50/p95`) for accuracy and fail metrics
+- delta vs baseline `K` (first value in `--k-values`)
+- strict-majority failure signal (`NO_MAJORITY` count)
+- estimated cost/latency from your per-call assumptions
+
+Notes:
+- `--bootstrap-runs 1` keeps deterministic first-`K` behavior.
+- `--bootstrap-runs > 1` samples random subsets per case and reports averaged metrics.
+- `--random-seed` makes bootstrap runs reproducible.
+
+
 ## Benchmark Data
 - `ai_benchmark/agentsettlement_benchmark.json`
 - `ai_benchmark/agentsettlement_benchmark_raw_v1.json`
@@ -43,7 +94,10 @@ Risk Weighted Fail: 39.9%
 ## Scripts
 - `scripts/generate-benchmark-prompts.js`
 - `scripts/generate-response-template.js`
+- `scripts/generate-ensemble-mock.js`
 - `scripts/score-model-responses.js`
+- `scripts/score-ensemble-responses.js`
+- `scripts/run-ensemble-k-sweep.js`
 - `scripts/score-manual-decisions.js`
 - `scripts/validate-manual-runs.js`
 - `scripts/build-model-comparison.js`

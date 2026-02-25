@@ -1,0 +1,12 @@
+# Generated ensemble evaluation artifacts
+/eval/ensemble_k_sweep/
+/eval/ensemble_scored.csv
+/eval/ensemble_summary.json
+/eval/ensemble_summary.md
+/eval/responses_ensemble_mock.jsonl
+
+# Local temporary evaluation scratch outputs
+/eval/tmp_k_sweep_*/
+/eval/tmp_no_majority.jsonl
+/eval/tmp_no_majority_out/
+/eval/tmp_smoke_ensemble/

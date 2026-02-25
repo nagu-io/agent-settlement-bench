@@ -62,7 +62,46 @@ Outputs:
 
 Scoring compares model decisions against `ai_benchmark/ground_truth.json`.
 
-## 5) Risk-Weighted Metric
+## 5) Ensemble Reference Run (Strict Majority, Non-Leaderboard)
+
+Prepare `eval/responses_ensemble.jsonl` with exactly `K` responses per case.
+Each row uses the same fields as normal model scoring:
+- `case_id`
+- `model_output`
+
+```powershell
+node scripts/score-ensemble-responses.js --input eval/responses_ensemble.jsonl --outdir eval/runs/<run_id> --model <MODEL_NAME> --k 7
+```
+
+Notes:
+- strict majority threshold is `floor(K/2)+1`
+- no strict majority produces `NO_MAJORITY` and is scored as fail (`ensemble_no_majority`)
+- ensemble runs are reference-only and not leaderboard-eligible
+
+## 6) Ensemble K Sweep (Reliability vs Cost, Non-Leaderboard)
+
+Use one high-sample ensemble file and compare multiple `K` values in one run:
+
+```powershell
+node scripts/run-ensemble-k-sweep.js --input eval/responses_ensemble.jsonl --k-values 1,3,5,7 --cost-per-call-usd 0.002 --latency-per-call-ms 850
+```
+
+To average each `K` over random subset trials:
+
+```powershell
+node scripts/run-ensemble-k-sweep.js --input eval/responses_ensemble.jsonl --k-values 1,3,5,7 --bootstrap-runs 30 --random-seed 42 --cost-per-call-usd 0.002 --latency-per-call-ms 850
+```
+
+Generated:
+- `eval/ensemble_k_sweep/ensemble_k_sweep.md`
+- `eval/ensemble_k_sweep/ensemble_k_sweep.json`
+- `eval/ensemble_k_sweep/ensemble_k_sweep.csv`
+- per-K outputs in `eval/ensemble_k_sweep/k*`
+
+`run-ensemble-k-sweep` uses strict-majority ensemble scoring for each K and reports metric deltas versus baseline K (the first K in `--k-values`).
+With `--bootstrap-runs > 1`, it reports mean, sample standard deviation, and percentile bands (`p5/p50/p95`) across trials.
+
+## 7) Risk-Weighted Metric
 
 Weights:
 - `low=1`
@@ -76,7 +115,7 @@ Formula:
 risk_weighted_fail_rate = sum(weight x fail) / sum(weight)
 ```
 
-## 6) Build Comparison Table
+## 8) Build Comparison Table
 
 ```powershell
 node scripts/build-model-comparison.js
@@ -88,12 +127,12 @@ Generated:
 
 `build-model-comparison` places only `run_type=model_raw_output` and full coverage runs on the leaderboard.
 
-## 7) Reference Runs
+## 9) Reference Runs
 
 Non-leaderboard runs (baselines, manual samples, self-checks) are tracked in:
 - `eval/runs/README.md`
 
-## 8) Manual Subset Scoring (Computed, Non-Estimated)
+## 10) Manual Subset Scoring (Computed, Non-Estimated)
 
 Prepare a decision file (`JSON` or `CSV`) with at least:
 - `case_id`
