@@ -1,5 +1,27 @@
 # AgentSettlementBench
 
+## Run in 60 seconds
+
+```powershell
+git clone https://github.com/nagu-io/agent-settlement-bench
+cd agent-settlement-bench
+npm install
+npm run benchmark
+```
+
+Optional arguments:
+
+```powershell
+npm run benchmark -- --model openai --key YOUR_OPENAI_KEY
+npm run benchmark -- --model gemini --key YOUR_GEMINI_KEY
+npm run benchmark -- --model local --api-model qwen2.5:7b --base-url http://localhost:11434/v1/chat/completions
+```
+
+Notes:
+- `--model` supports: `mock`, `openai`, `gemini`, `local`
+- `--api-model` chooses provider model id (defaults are built in)
+- `--key` can be omitted if `.env` has `OPENAI_API_KEY` or `GEMINI_API_KEY`
+
 ![Status](https://img.shields.io/badge/benchmark-active-brightgreen)
 ![Domain](https://img.shields.io/badge/domain-AI%20Safety-blue)
 
@@ -111,6 +133,7 @@ Notes:
 - `ai_benchmark/run_eval.md`
 
 ## Scripts
+- `scripts/run-benchmark.js`
 - `scripts/generate-benchmark-prompts.js`
 - `scripts/generate-response-template.js`
 - `scripts/generate-ensemble-mock.js`

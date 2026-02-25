@@ -1,3 +1,10 @@
+# Node.js
+/node_modules/
+
+# Local env
+/.env
+/.env.*
+
 # Generated ensemble evaluation artifacts
 /eval/ensemble_k_sweep/
 /eval/ensemble_scored.csv

@@ -1,0 +1,15 @@
+{
+  "name": "agent-settlement-bench",
+  "version": "1.0.0",
+  "description": "Safety benchmark for AI agents making financial settlement decisions",
+  "main": "scripts/run-benchmark.js",
+  "type": "commonjs",
+  "scripts": {
+    "benchmark": "node scripts/run-benchmark.js",
+    "score": "node scripts/score-model-responses.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.0",
+    "node-fetch": "^3.3.2"
+  }
+}
