@@ -2,10 +2,48 @@
 
 Safety benchmark for AI agents making irreversible financial decisions.
 
-It evaluates whether LLMs correctly refuse unsafe blockchain payments under adversarial conditions (reorgs, spoofed tokens, RPC disagreement, race conditions).
+AgentSettlementBench is the first benchmark that tests whether AI agents safely handle irreversible money decisions, not just whether they answer questions correctly.
 
 ![Status](https://img.shields.io/badge/benchmark-active-brightgreen)
 ![Domain](https://img.shields.io/badge/domain-AI%20Safety-blue)
+
+## Result Snapshot (Public Leaderboard)
+
+It evaluates whether LLMs correctly refuse unsafe blockchain payments under adversarial conditions (reorgs, spoofed tokens, RPC disagreement, race conditions).
+
+| Model | Accuracy | Critical Fail Rate | Risk-Weighted Fail |
+|:---|---:|---:|---:|
+| Codex | 50.0% | 30.0% | 40.0% |
+| Gemini 3.1 | 55.0% | 28.6% | 39.9% |
+| Claude Haiku (subset 13/20) | 84.6% | 0.0% | 15.0% |
+| ChatGPT-4.1 (subset 10/20) | 90.0% | 0.0% | 9.0% |
+| MiniMax-2.5 (subset 10/20) | 80.0% | 20.0% | 24.0% |
+
+Subset rows are reference-only and not leaderboard-eligible.
+
+## Mental Model
+
+Traditional benchmarks:
+question -> answer -> score
+
+AgentSettlementBench:
+event -> financial decision -> irreversible consequence
+
+We measure whether the agent refuses unsafe actions, not whether it sounds intelligent.
+
+## What you get
+
+Running the benchmark produces:
+- Safety accuracy score
+- Critical failure rate (money loss risk)
+- Risk-weighted reliability score
+
+Example:
+```text
+Accuracy: 55%
+Critical Fail Rate: 28.6%
+Risk Weighted Fail: 39.9%
+```
 
 ## Run in 60 seconds
 
@@ -29,17 +67,22 @@ Notes:
 - `--api-model` chooses provider model id (defaults are built in)
 - `--key` can be omitted if `.env` has `OPENAI_API_KEY` or `GEMINI_API_KEY`
 
-## Public Leaderboard
+## Supported Models
 
-| Model | Accuracy | Critical Fail Rate | Risk-Weighted Fail |
-|:---|---:|---:|---:|
-| Codex | 50.0% | 30.0% | 40.0% |
-| Gemini 3.1 | 55.0% | 28.6% | 39.9% |
-| Claude Haiku (subset 13/20) | 84.6% | 0.0% | 15.0% |
-| ChatGPT-4.1 (subset 10/20) | 90.0% | 0.0% | 9.0% |
-| MiniMax-2.5 (subset 10/20) | 80.0% | 20.0% | 24.0% |
+- OpenAI
+- Gemini
+- Local (Ollama, LM Studio, vLLM)
+- Mock baseline
 
-Subset rows are reference-only and not leaderboard-eligible.
+Small models are intentionally supported.
+
+## Who this is for
+
+- AI agent developers
+- Fintech builders
+- Alignment researchers
+- Evaluation researchers
+- Safety teams
 
 ## Evaluation Modes
 
@@ -62,8 +105,6 @@ Reliability is architecture-dependent, not size-dependent.
 - Evaluate AI agent settlement safety under adversarial crypto payment scenarios.
 - Compare single-run model behavior vs architecture-level controls (strict prompts, verification tools, ensembles).
 - Provide reproducible scoring and model comparison artifacts.
-
-Visibility operations (topics, discussions, release, starter issue): `docs/github-visibility.md`
 
 ## Quick Start
 1) Generate prompts
@@ -277,3 +318,7 @@ Investigate whether benchmark failures can automatically generate new control ru
 
 ### 5. Formal Safety Guarantees
 Explore combining LLM reasoning with verifiable checks (deterministic state machines or formal constraints) to move from empirical reliability toward provable safety bounds for financial agents.
+
+## Maintainer Notes
+
+Visibility operations (topics, discussions, release, starter issue): `docs/github-visibility.md`
