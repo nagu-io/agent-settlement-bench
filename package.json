@@ -9,7 +9,6 @@
     "score": "node scripts/score-model-responses.js"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.78.0",
     "dotenv": "^16.4.0",
     "node-fetch": "^3.3.2"
   }

@@ -60,21 +60,19 @@ Optional arguments:
 ```powershell
 npm run benchmark -- -- --model openai --mode v0 --key YOUR_OPENAI_KEY
 npm run benchmark -- -- --model gemini --key YOUR_GEMINI_KEY
-npm run benchmark -- -- --model claude --key YOUR_ANTHROPIC_KEY
 npm run benchmark -- -- --model local --api-model qwen2.5:7b --base-url http://localhost:11434/v1/chat/completions
 ```
 
 Notes:
-- `--model` supports: `mock`, `openai`, `gemini`, `claude`, `local`
+- `--model` supports: `mock`, `openai`, `gemini`, `local`
 - `--mode` tags the run in summary output (for example: `v0`, `v1`, `v3`)
 - `--api-model` chooses provider model id (defaults are built in)
-- `--key` can be omitted if `.env` has `OPENAI_API_KEY`, `GEMINI_API_KEY`, or `ANTHROPIC_API_KEY`
+- `--key` can be omitted if `.env` has `OPENAI_API_KEY` or `GEMINI_API_KEY`
 
 ## Supported Models
 
 - OpenAI
 - Gemini
-- Claude
 - Local (Ollama, LM Studio, vLLM)
 - Mock baseline
 - Ensemble voting setups
