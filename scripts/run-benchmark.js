@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
+const { runClaudeWithPrompts } = require('../providers/claude');
 const {
   STANDARD_OUTPUT_CONTRACT,
   STANDARD_SYSTEM_PROMPT,
@@ -13,10 +14,11 @@ try {
   // dotenv is optional at runtime.
 }
 
-const PROVIDERS = new Set(['mock', 'openai', 'gemini', 'local']);
+const PROVIDERS = new Set(['mock', 'openai', 'gemini', 'claude', 'local']);
 const DEFAULT_PROVIDER_MODELS = {
   openai: 'gpt-4.1-mini',
   gemini: 'gemini-2.0-flash',
+  claude: 'claude-3-5-sonnet-latest',
   local: 'qwen2.5:7b',
 };
 
@@ -177,6 +179,12 @@ function resolveProviderConfig(parsedArgs) {
     provider = requestedProvider;
   } else if (PROVIDERS.has(requestedModelLower)) {
     provider = requestedModelLower;
+  } else if (
+    requestedModelLower.includes('claude') ||
+    requestedModelLower.includes('anthropic')
+  ) {
+    provider = 'claude';
+    if (!apiModel) apiModel = requestedModel;
   } else if (requestedModelLower.includes('gemini')) {
     provider = 'gemini';
     if (!apiModel) apiModel = requestedModel;
@@ -196,7 +204,7 @@ function resolveProviderConfig(parsedArgs) {
 
   if (!PROVIDERS.has(provider)) {
     throw new Error(
-      `Unsupported provider "${provider}". Use one of: mock, openai, gemini, local.`
+      `Unsupported provider "${provider}". Use one of: mock, openai, gemini, claude, local.`
     );
   }
 
@@ -209,13 +217,18 @@ function resolveProviderConfig(parsedArgs) {
       ? process.env.OPENAI_API_KEY || ''
       : provider === 'gemini'
       ? process.env.GEMINI_API_KEY || ''
+      : provider === 'claude'
+      ? process.env.ANTHROPIC_API_KEY || ''
       : process.env.LOCAL_API_KEY || '';
 
   const key = parsedArgs.key || keyFromEnv;
 
-  if ((provider === 'openai' || provider === 'gemini') && !key) {
+  const providerKeyEnvName =
+    provider === 'claude' ? 'ANTHROPIC_API_KEY' : `${provider.toUpperCase()}_API_KEY`;
+
+  if ((provider === 'openai' || provider === 'gemini' || provider === 'claude') && !key) {
     throw new Error(
-      `${provider} provider requires an API key. Pass --key or set ${provider.toUpperCase()}_API_KEY in .env`
+      `${provider} provider requires an API key. Pass --key or set ${providerKeyEnvName} in .env`
     );
   }
 
@@ -227,6 +240,8 @@ function resolveProviderConfig(parsedArgs) {
       ? `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
           apiModel
         )}:generateContent?key=${encodeURIComponent(key)}`
+      : provider === 'claude'
+      ? 'https://api.anthropic.com/v1/messages'
       : provider === 'local'
       ? 'http://localhost:11434/v1/chat/completions'
       : '');
@@ -418,6 +433,18 @@ async function callGemini(config, prompts) {
   return text;
 }
 
+async function callClaude(config, prompts) {
+  return runClaudeWithPrompts({
+    apiKey: config.key,
+    model: config.apiModel,
+    temperature: config.temperature,
+    maxTokens: config.maxOutputTokens,
+    timeoutMs: config.timeoutMs,
+    systemPrompt: prompts.systemPrompt,
+    userPrompt: prompts.userPrompt,
+  });
+}
+
 async function callLocal(config, prompts) {
   const body = {
     model: config.apiModel,
@@ -470,6 +497,9 @@ async function generateModelOutput(config, caseItem) {
   }
   if (config.provider === 'gemini') {
     return callGemini(config, prompts);
+  }
+  if (config.provider === 'claude') {
+    return callClaude(config, prompts);
   }
   if (config.provider === 'local') {
     return callLocal(config, prompts);
